@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths(){
+  const notes = await getCollection('notes', ({data})=>!data.draft);
+  return notes.map(note=>({params:{id:note.id},props:{note}}));
+}
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+<Base title={`${note.data.title} — NOMAD FIELD`} description={note.data.description} canonical={`/notes/${note.id}/`}><article class="article"><a class="back" href="/notes">← FIELD NOTES</a><div class="eyebrow">{note.data.pubDate.toLocaleDateString('ja-JP')} / {note.data.tags.join(' · ')}</div><h1>{note.data.title}</h1><p class="lead">{note.data.description}</p><div class="content"><Content /></div></article></Base>

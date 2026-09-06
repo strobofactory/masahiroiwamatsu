@@ -12,15 +12,16 @@
   <style is:global>
     :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34;--warn:#8b5a00}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif;font-weight:400}
-    button,input,textarea{font:inherit}.shell{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+    button,input,textarea,select{font:inherit}.shell{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
     .brand{font-size:15px;font-weight:700;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase}.panel{background:var(--paper);border:1px solid var(--line);padding:24px;margin-top:22px}.hidden{display:none!important}
     h1{font-size:clamp(38px,7vw,76px);font-weight:700;letter-spacing:-.045em;line-height:.95;margin:14px 0 28px}h2{font-size:12px;letter-spacing:.14em;margin:0 0 18px}.hint{color:var(--muted);font-size:12px;line-height:1.7}
-    .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+    .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field input:disabled{background:#f3f3ef;color:#888}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.btn.danger{background:transparent;color:#777;border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
     .status{font-size:12px;line-height:1.7;margin-top:12px;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.service{border:1px solid var(--line);padding:10px;font-size:11px}.service.ok{color:var(--ok)}.service.warn{color:var(--warn)}
+    .article-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.article-mode{font-size:11px;color:var(--muted);margin-top:9px}.article-mode strong{color:var(--ink);font-weight:600}
     .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px;overflow:hidden}.thumb{display:block;width:96px!important;height:72px!important;max-width:96px!important;max-height:72px!important;object-fit:cover!important;background:#eee;overflow:hidden}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
     .cover{display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:start}.cover img{width:160px;aspect-ratio:16/10;object-fit:cover;background:#eee;border:1px solid var(--line)}.code-note{font-size:11px;color:var(--muted);padding:12px;border-left:1px solid #111;margin:14px 0}
-    @media(max-width:760px){.grid,.service-grid,.cover{grid-template-columns:1fr}.media-item{grid-template-columns:72px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:72px!important;height:54px!important;max-width:72px!important;max-height:54px!important}.top{align-items:flex-start}.shell{padding-top:22px}}
+    @media(max-width:760px){.grid,.service-grid,.cover,.article-picker{grid-template-columns:1fr}.media-item{grid-template-columns:72px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:72px!important;height:54px!important;max-width:72px!important;max-height:54px!important}.top{align-items:flex-start}.shell{padding-top:22px}}
   </style>
 </head>
 <body>
@@ -38,6 +39,17 @@
         <div class="sub">System</div><h1>WRITE.<br>DROP.<br>PUBLISH.</h1>
         <div class="hint">Claudeで作った文章を貼り、写真や動画をここへ落とします。GitHubやBunnyの管理画面を普段開く必要はありません。</div>
         <div id="services" class="service-grid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>EDIT EXISTING NOTE</h2>
+        <div class="hint">過去の記事を選ぶと、本文・タグ・カバー画像まで読み込んで編集できます。既存記事のURLは誤変更を防ぐため固定します。</div>
+        <div class="article-picker">
+          <div class="field" style="margin:14px 0 0"><label>ARTICLE</label><select id="articleSelect"><option value="">新しい記事を書く</option></select></div>
+          <div class="actions"><button id="newArticleBtn" class="btn secondary">新規記事</button><button id="refreshArticlesBtn" class="btn secondary">一覧更新</button></div>
+        </div>
+        <div id="articleMode" class="article-mode"><strong>NEW</strong> 新規記事モード</div>
+        <div id="articleListStatus" class="status"></div>
       </section>
 
       <section class="panel">
@@ -71,8 +83,8 @@
 
       <section class="panel">
         <h2>PUBLISH</h2>
-        <div class="code-note">「下書き保存」はWebに表示しません。「公開」はGitHubへコミット後、Vercelの本番反映まで通常少し待ちます。</div>
-        <div class="actions"><button id="draftBtn" class="btn secondary">下書き保存</button><button id="publishBtn" class="btn">公開</button><button id="logoutBtn" class="btn danger">ログアウト</button></div>
+        <div class="code-note">「下書き保存」はWebに表示しません。既存の公開記事を下書き保存すると非公開になります。「公開」はGitHubへの保存後、Vercelの反映まで少し待ちます。</div>
+        <div class="actions"><button id="draftBtn" class="btn secondary">下書き保存</button><button id="publishBtn" class="btn">公開 / 更新</button><button id="logoutBtn" class="btn danger">ログアウト</button></div>
         <div id="publishStatus" class="status"></div>
       </section>
     </main>
@@ -88,6 +100,9 @@
   const mediaList = $('mediaList');
   const bodyEl = $('body');
   let serviceState = {};
+  let loadedArticleSlug = '';
+  let loadedArticlePubDate = '';
+  let loadedArticleDraft = true;
 
   function fallbackSlug() {
     const d = new Date();
@@ -98,6 +113,16 @@
   function slugify(value) {
     const slug = String(value || '').normalize('NFKD').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,100);
     return slug || fallbackSlug();
+  }
+
+  function setArticleMode(article = null) {
+    if (article) {
+      $('articleMode').innerHTML = `<strong>EDIT</strong> ${article.draft ? '下書き' : '公開済み'} · ${article.pubDate || ''} · /notes/${article.slug}/`;
+      $('slug').disabled = true;
+    } else {
+      $('articleMode').innerHTML = '<strong>NEW</strong> 新規記事モード';
+      $('slug').disabled = false;
+    }
   }
 
   async function checkSession() {
@@ -113,7 +138,10 @@
   }
 
   function showEditor() {
-    loginPanel.classList.add('hidden'); editor.classList.remove('hidden'); renderServices();
+    loginPanel.classList.add('hidden');
+    editor.classList.remove('hidden');
+    renderServices();
+    if (serviceState.github) loadArticleList();
   }
 
   function renderServices() {
@@ -124,6 +152,85 @@
     ];
     servicesEl.innerHTML = items.map(([name,ok]) => `<div class="service ${ok?'ok':'warn'}">${ok?'●':'○'} ${name}<br>${ok?'READY':'SETUP REQUIRED'}</div>`).join('');
   }
+
+  async function loadArticleList(selectSlug = loadedArticleSlug) {
+    const status = $('articleListStatus');
+    status.textContent = '記事一覧を読み込み中…';
+    try {
+      const res = await fetch('/api/studio/articles', { cache:'no-store' });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(data.error || '記事一覧を取得できませんでした。');
+      const select = $('articleSelect');
+      select.innerHTML = '<option value="">新しい記事を書く</option>';
+      for (const article of data.articles || []) {
+        const option = document.createElement('option');
+        option.value = article.slug;
+        option.textContent = `${article.draft ? '[下書き]' : '[公開]'} ${article.pubDate || ''}  ${article.title}`;
+        select.appendChild(option);
+      }
+      if (selectSlug) select.value = selectSlug;
+      status.textContent = `${(data.articles || []).length}件の記事を読み込みました。`;
+    } catch (e) {
+      status.textContent = e.message;
+    }
+  }
+
+  async function loadArticle(slug) {
+    if (!slug) { resetArticle(); return; }
+    const status = $('articleListStatus');
+    status.textContent = '記事を読み込み中…';
+    try {
+      const res = await fetch(`/api/studio/articles?slug=${encodeURIComponent(slug)}`, { cache:'no-store' });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(data.error || '記事を読み込めませんでした。');
+      const a = data.article;
+      loadedArticleSlug = a.slug;
+      loadedArticlePubDate = a.pubDate || '';
+      loadedArticleDraft = Boolean(a.draft);
+      $('title').value = a.title || '';
+      $('description').value = a.description || '';
+      $('slug').value = a.slug || '';
+      $('tags').value = (a.tags || []).join(', ');
+      bodyEl.value = a.body || '';
+      $('coverImage').value = a.image || '';
+      $('coverAlt').value = a.imageAlt || '';
+      $('coverCaption').value = a.imageCaption || '';
+      $('coverPreview').src = a.image || '';
+      $('claudeRaw').value = '';
+      mediaList.innerHTML = '';
+      if (a.image) addMediaCard({type:'image',name:'Current cover image',url:a.image,markdown:`![${a.imageAlt || a.title}](${a.image})`});
+      setArticleMode(a);
+      status.textContent = `「${a.title}」を編集中です。`;
+      $('publishStatus').textContent = '';
+      window.scrollTo({top:0,behavior:'smooth'});
+    } catch (e) {
+      status.textContent = e.message;
+    }
+  }
+
+  function resetArticle() {
+    loadedArticleSlug = '';
+    loadedArticlePubDate = '';
+    loadedArticleDraft = true;
+    $('articleSelect').value = '';
+    $('title').value = '';
+    $('description').value = '';
+    $('slug').value = '';
+    $('tags').value = '';
+    bodyEl.value = '';
+    $('coverImage').value = '';
+    $('coverAlt').value = '';
+    $('coverCaption').value = '';
+    $('coverPreview').removeAttribute('src');
+    $('claudeRaw').value = '';
+    mediaList.innerHTML = '';
+    $('publishStatus').textContent = '';
+    setArticleMode();
+  }
+
+  $('articleSelect').addEventListener('change', e => loadArticle(e.target.value));
+  $('newArticleBtn').addEventListener('click', resetArticle);
+  $('refreshArticlesBtn').addEventListener('click', () => loadArticleList());
 
   $('loginBtn').addEventListener('click', async () => {
     $('loginStatus').textContent = '確認中…';
@@ -153,10 +260,10 @@
     if (description) $('description').value = description;
     if (tags) $('tags').value = tags.replace(/[、]/g,',');
     bodyEl.value = body || raw;
-    if (!$('slug').value) $('slug').value = slugify(title);
+    if (!loadedArticleSlug && !$('slug').value) $('slug').value = slugify(title);
   });
   $('clearRawBtn').addEventListener('click',()=>{$('claudeRaw').value='';});
-  $('title').addEventListener('blur',()=>{ if (!$('slug').value) $('slug').value=slugify($('title').value); });
+  $('title').addEventListener('blur',()=>{ if (!loadedArticleSlug && !$('slug').value) $('slug').value=slugify($('title').value); });
 
   function insertAtCursor(text) {
     const start = bodyEl.selectionStart ?? bodyEl.value.length;
@@ -206,6 +313,7 @@
     if (!serviceState.bunnyStorage) throw new Error('Bunny Storageの設定がまだです。');
     const {blob,name}=await compressImage(file);
     const slug=$('slug').value || fallbackSlug();
+    if (!$('slug').value && !loadedArticleSlug) $('slug').value = slug;
     const res=await fetch(`/api/studio/image-upload?slug=${encodeURIComponent(slug)}&name=${encodeURIComponent(name)}`,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:blob});
     const data=await res.json().catch(()=>({}));
     if(!res.ok) throw new Error(data.error||'画像アップロードに失敗しました。');
@@ -252,16 +360,36 @@
   $('coverImage').addEventListener('input',()=>{$('coverPreview').src=$('coverImage').value;});
 
   async function save(draft) {
-    const status=$('publishStatus'); status.textContent=draft?'下書きを保存中…':'公開用コミットを作成中…';
-    const payload={title:$('title').value.trim(),description:$('description').value.trim(),slug:$('slug').value.trim()||fallbackSlug(),tags:$('tags').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean),body:bodyEl.value.trim(),image:$('coverImage').value.trim(),imageAlt:$('coverAlt').value.trim(),imageCaption:$('coverCaption').value.trim(),draft};
+    const status=$('publishStatus');
+    status.textContent=draft ? (loadedArticleSlug?'記事を下書きとして更新中…':'下書きを保存中…') : (loadedArticleSlug?'公開記事を更新中…':'公開用コミットを作成中…');
+    const payload={
+      title:$('title').value.trim(),
+      description:$('description').value.trim(),
+      slug:$('slug').value.trim()||fallbackSlug(),
+      originalSlug:loadedArticleSlug,
+      pubDate:loadedArticlePubDate,
+      tags:$('tags').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean),
+      body:bodyEl.value.trim(),
+      image:$('coverImage').value.trim(),
+      imageAlt:$('coverAlt').value.trim(),
+      imageCaption:$('coverCaption').value.trim(),
+      draft
+    };
     const res=await fetch('/api/studio/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json().catch(()=>({}));
     if(!res.ok){status.textContent=data.error||'保存に失敗しました。';return;}
     $('slug').value=data.slug;
-    status.innerHTML=draft?`下書きを保存しました。<br>GitHub: ${data.filePath}`:`公開コミットを作成しました。Vercel反映後: <a href="${data.url}" target="_blank">${data.url}</a>`;
+    loadedArticleSlug=data.slug;
+    if (!loadedArticlePubDate) loadedArticlePubDate = new Date().toISOString().slice(0,10);
+    loadedArticleDraft=draft;
+    $('slug').disabled=true;
+    setArticleMode({slug:data.slug,title:$('title').value,draft,pubDate:loadedArticlePubDate});
+    status.innerHTML=draft ? `下書きを保存しました。<br>GitHub: ${data.filePath}` : `保存しました。Vercel反映後: <a href="${data.url}" target="_blank">${data.url}</a>`;
+    await loadArticleList(data.slug);
   }
   $('draftBtn').onclick=()=>save(true); $('publishBtn').onclick=()=>save(false);
 
+  setArticleMode();
   checkSession().catch(e=>{loginPanel.classList.remove('hidden');$('loginStatus').textContent=e.message;});
 </script>
 </body>

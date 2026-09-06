@@ -1,4 +1,38 @@
 ---
 import Base from '../../layouts/Base.astro';
+const description = '岩松正浩（Masahiro Iwamatsu）の公式プロフィール。映像制作を起点に、AI・業務自動化、アプリ開発、出版、音楽、ヘルスケアなど複数領域で企画・制作・運用を行う。';
 ---
-<Base title="ABOUT — Masahiro Iwamatsu"><main><section class="hero"><div class="wrap"><div class="eyebrow">Profile</div><h1>MASAHIRO<br/>IWAMATSU</h1></div></section><section class="section"><div class="wrap about-grid"><h2>Producer.<br/>Builder.<br/>Publisher.</h2><div><p>株式会社ストロボファクトリー代表取締役。映像業界で24年以上のキャリアを持ち、企業映像、ライブ配信、編集などを手がける。</p><p>現在は映像制作に加え、AI・業務自動化、iOSアプリ、出版、音楽、ヘルスケア、コーヒーなど複数の領域で、自ら企画・制作・運用まで行う。</p><p>NOMAD FIELDは、それらを肩書き別に分断せず、一人の人間が実際に試した記録として保存する公式アーカイブ。</p></div></div></section></main></Base>
+<Base title="ABOUT — Masahiro Iwamatsu" description={description}>
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Profile / Official Archive</div>
+        <h1>MASAHIRO<br/>IWAMATSU</h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap about-grid">
+        <h2>PRODUCER.<br/>BUILDER.<br/>PUBLISHER.</h2>
+        <div>
+          <p>岩松正浩。株式会社ストロボファクトリー代表取締役。映像業界で24年以上、企業映像、番組、ミュージックビデオ、eラーニング、ライブ配信などの制作に携わってきました。</p>
+          <p>現在は映像制作を起点に、AI・業務自動化、iOSアプリ開発、出版、音楽、ヘルスケア、オンライン教育などへ活動領域を広げ、企画から制作、運用まで自ら行っています。</p>
+          <p>NOMAD FIELDは、これらを肩書きや事業ごとに分断せず、一人の人間が実際に見て、作って、試した記録として残すための公式アーカイブです。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>OFFICIAL DESTINATIONS</h2></div>
+        <div class="profile-links">
+          <a href="https://www.strobofactory.net/" target="_blank" rel="noopener noreferrer"><span>STROBOFACTORY</span><span>↗</span></a>
+          <a href="https://nextacademy.mykajabi.com/" target="_blank" rel="noopener noreferrer"><span>NEXT ACADEMY</span><span>↗</span></a>
+          <a href="https://hapiveri.com/" target="_blank" rel="noopener noreferrer"><span>HAPIVERI</span><span>↗</span></a>
+          <a href="https://www.hapiveri-healthcare.ai/" target="_blank" rel="noopener noreferrer"><span>HAPIVERI Healthcare.ai</span><span>↗</span></a>
+          <a href="https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP" target="_blank" rel="noopener noreferrer"><span>BOOKS / Amazon Author Page</span><span>↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

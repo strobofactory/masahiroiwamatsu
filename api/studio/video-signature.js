@@ -37,6 +37,7 @@ export default async function handler(req, res) {
     .digest('hex');
 
   const embedUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}`;
+  const markdown = `<div style="position:relative;padding-top:56.25%;margin:36px 0;overflow:hidden"><iframe src="${embedUrl}" loading="lazy" style="border:0;position:absolute;inset:0;width:100%;height:100%" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
   return res.status(200).json({
     ok: true,
     endpoint: 'https://video.bunnycdn.com/tusupload',
@@ -45,6 +46,6 @@ export default async function handler(req, res) {
     expiresAt,
     signature,
     embedUrl,
-    markdown: `<div class="video-embed"><iframe src="${embedUrl}" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`
+    markdown
   });
 }

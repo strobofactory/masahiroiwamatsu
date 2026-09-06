@@ -37,7 +37,7 @@ const officialLinks = [
 ---
 <Base>
   <main>
-    <section class="hero"><div class="wrap"><div class="eyebrow">Masahiro Iwamatsu / Official Archive</div><h1>NOMAD<br/>FIELD</h1><div class="hero-copy"><p>AI、映像、健康、アプリ、旅、コーヒー、出版。分野ではなく、実際に見て、作って、試したことを記録する。</p><p>これは情報を量産するブログではなく、岩松正浩の一次情報を長期保存するためのフィールドノートです。</p></div></div></section>
+    <section class="hero"><div class="wrap"><div class="eyebrow">Masahiro Iwamatsu / Official Archive</div><h1>NOMAD<br/>FIELD</h1></div></section>
     <section class="section"><div class="wrap"><div class="section-head"><h2>FIELD NOTES</h2><a href="/notes">VIEW ALL →</a></div><div class="notes">{notes.map((note,i)=><a class="card" href={`/notes/${note.id}/`}><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.slice(0,3).map(t=><span>{t}</span>)}</div></div></a>)}</div></div></section>
     <section class="section"><div class="wrap about-grid"><h2>ONE PERSON.<br/>MANY FIELDS.</h2><div><p>映像制作を軸に、AI、自動化、アプリ開発、出版、音楽、ヘルスケアへ。活動領域が変わっても、原点は「自分で確かめる」ことです。</p><p>NOMAD FIELDは、その過程を企業やSNSではなく、自分の名前のドメインに残すための場所です。</p><p><a href="/about">PROFILE →</a></p></div></div></section>
 

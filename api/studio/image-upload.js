@@ -1,4 +1,8 @@
+import sharp from 'sharp';
 import { requireStudioAuth } from '../../lib/studio-auth.js';
+
+const CINEMA_WIDTH = 1920;
+const CINEMA_HEIGHT = Math.round(CINEMA_WIDTH / 2.39);
 
 function cleanSegment(value, fallback = 'file') {
   return String(value || fallback)
@@ -6,6 +10,20 @@ function cleanSegment(value, fallback = 'file') {
     .replace(/[^a-zA-Z0-9._-]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 120) || fallback;
+}
+
+async function makePublicImage(input) {
+  return sharp(input, { failOn: 'none' })
+    .rotate()
+    .resize({
+      width: CINEMA_WIDTH,
+      height: CINEMA_HEIGHT,
+      fit: 'cover',
+      position: sharp.strategy.attention,
+      withoutEnlargement: true
+    })
+    .webp({ quality: 84, effort: 5 })
+    .toBuffer();
 }
 
 export default async function handler(req, res) {
@@ -23,8 +41,16 @@ export default async function handler(req, res) {
   if (!body.length) return res.status(400).json({ error: 'No image data received.' });
   if (body.length > 3.8 * 1024 * 1024) return res.status(413).json({ error: 'Compressed image is still too large.' });
 
+  let publicImage;
+  try {
+    publicImage = await makePublicImage(body);
+  } catch (error) {
+    return res.status(422).json({ error: 'Image smart crop failed.', detail: String(error?.message || error).slice(0, 300) });
+  }
+
   const slug = cleanSegment(req.query?.slug, 'draft');
-  const fileName = cleanSegment(req.query?.name, `image-${Date.now()}.webp`);
+  const requestedName = cleanSegment(req.query?.name, `image-${Date.now()}.webp`);
+  const fileName = requestedName.replace(/\.[^.]+$/, '') + '.webp';
   const path = `notes/${slug}/${Date.now()}-${fileName}`;
   const encodedPath = path.split('/').map(encodeURIComponent).join('/');
   const uploadUrl = `https://${host}/${encodeURIComponent(zone)}/${encodedPath}`;
@@ -33,9 +59,9 @@ export default async function handler(req, res) {
     method: 'PUT',
     headers: {
       AccessKey: password,
-      'Content-Type': 'application/octet-stream'
+      'Content-Type': 'image/webp'
     },
-    body
+    body: publicImage
   });
 
   if (!upload.ok) {
@@ -46,6 +72,12 @@ export default async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     path,
-    url: `${cdn}/${path}`
+    url: `${cdn}/${path}`,
+    crop: {
+      ratio: '2.39:1',
+      mode: 'content-aware-attention',
+      width: CINEMA_WIDTH,
+      height: CINEMA_HEIGHT
+    }
   });
 }

@@ -6,8 +6,16 @@ const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort((a,
 <Base>
   <main>
     <section class="hero"><div class="wrap"><div class="eyebrow">Masahiro Iwamatsu / Official Archive</div><h1>NOMAD<br/>FIELD</h1></div></section>
-    <section class="section"><div class="wrap"><div class="section-head"><h2>FIELD NOTES</h2><a href="/notes">VIEW ALL →</a></div><div class="notes">{notes.map((note,i)=><a class="card" href={`/notes/${note.id}/`}><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.slice(0,3).map(t=><span>{t}</span>)}</div></div></a>)}</div></div></section>
+    <section class="section"><div class="wrap"><div class="section-head"><h2>FIELD NOTES</h2><a href="/notes">VIEW ALL →</a></div><div class="notes">{notes.map((note,i)=><a class={`card ${note.data.image ? 'card-with-thumb' : ''}`} href={`/notes/${note.id}/`}>{note.data.image && <div class="card-thumb-wrap"><img src={note.data.image} alt={note.data.imageAlt ?? note.data.title} loading="lazy" /></div>}<div class="card-content"><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.slice(0,3).map(t=><span>{t}</span>)}</div></div></div></a>)}</div></div></section>
     <section class="section"><div class="wrap about-grid"><h2>ONE PERSON.<br/>MANY FIELDS.</h2><div><p>映像制作を軸に、AI、自動化、アプリ開発、出版、音楽、ヘルスケアへ。活動領域が変わっても、原点は「自分で確かめる」ことです。</p><p>NOMAD FIELDは、その過程を企業やSNSではなく、自分の名前のドメインに残すための場所です。</p><p><a href="/about">PROFILE →</a></p></div></div></section>
     <section class="section"><div class="wrap newsletter"><div><div class="eyebrow">Newsletter</div><h2>NEW NOTES,<br/>DIRECT.</h2><p>新しい記事と活動の記録をメールで届けます。Mailchimpの購読URLは公開前に接続します。</p></div><div class="eyebrow" style="margin:0">Mailchimp / connection pending</div></div></section>
   </main>
+  <style is:global>
+    .card.card-with-thumb{padding:0;overflow:hidden}
+    .card-thumb-wrap{width:100%;aspect-ratio:2.39/1;overflow:hidden;background:#eee}
+    .card-thumb-wrap img{width:100%;height:100%;object-fit:cover;margin:0}
+    .card-content{display:flex;flex:1;flex-direction:column;justify-content:space-between}
+    .card-with-thumb .card-content{min-height:172px;padding:18px 22px 20px}
+    .card-with-thumb h3{margin:28px 0 16px}
+  </style>
 </Base>

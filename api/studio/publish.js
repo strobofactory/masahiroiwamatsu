@@ -25,7 +25,7 @@ function yamlArray(values) {
 async function githubRequest(path, options = {}) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) throw new Error('GITHUB_TOKEN is not configured.');
-  const response = await fetch(`https://api.github.com/repos/${REPO}${path}`, {
+  return fetch(`https://api.github.com/repos/${REPO}${path}`, {
     ...options,
     headers: {
       Accept: 'application/vnd.github+json',
@@ -34,7 +34,6 @@ async function githubRequest(path, options = {}) {
       ...(options.headers || {})
     }
   });
-  return response;
 }
 
 export default async function handler(req, res) {
@@ -49,28 +48,17 @@ export default async function handler(req, res) {
   const draft = req.body?.draft !== false;
   const requestedSlug = String(req.body?.slug || '').trim();
   const slug = slugify(requestedSlug || title);
+  const originalSlug = slugify(String(req.body?.originalSlug || '').trim());
   const image = String(req.body?.image || '').trim();
   const imageAlt = String(req.body?.imageAlt || '').trim();
   const imageCaption = String(req.body?.imageCaption || '').trim();
 
   if (!title || !description || !body) return res.status(400).json({ error: 'Title, description and body are required.' });
   if (!slug) return res.status(400).json({ error: 'A valid ASCII slug is required.' });
+  if (originalSlug && originalSlug !== slug) return res.status(400).json({ error: '既存記事のURL（slug）はStudioから変更できません。新しい記事として作成してください。' });
 
   const now = new Date();
-  const date = String(req.body?.pubDate || now.toISOString().slice(0, 10));
-  const lines = [
-    '---',
-    `title: ${yamlString(title)}`,
-    `description: ${yamlString(description)}`,
-    `pubDate: ${date}`,
-    `tags: ${yamlArray(tags)}`,
-    `draft: ${draft ? 'true' : 'false'}`
-  ];
-  if (image) lines.push(`image: ${yamlString(image)}`);
-  if (imageAlt) lines.push(`imageAlt: ${yamlString(imageAlt)}`);
-  if (imageCaption) lines.push(`imageCaption: ${yamlString(imageCaption)}`);
-  lines.push('---', '', body, '');
-  const content = lines.join('\n');
+  const today = now.toISOString().slice(0, 10);
   const filePath = `src/content/notes/${slug}.md`;
   const encodedPath = filePath.split('/').map(encodeURIComponent).join('/');
 
@@ -84,7 +72,28 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: 'Could not read article from GitHub.', detail: detail.slice(0, 400) });
   }
 
-  const message = draft ? `Save draft: ${title}` : `Publish field note: ${title}`;
+  const isEditing = Boolean(currentSha && originalSlug);
+  const pubDate = String(req.body?.pubDate || today).slice(0, 10);
+  const lines = [
+    '---',
+    `title: ${yamlString(title)}`,
+    `description: ${yamlString(description)}`,
+    `pubDate: ${pubDate}`
+  ];
+  if (isEditing) lines.push(`updatedDate: ${today}`);
+  lines.push(
+    `tags: ${yamlArray(tags)}`,
+    `draft: ${draft ? 'true' : 'false'}`
+  );
+  if (image) lines.push(`image: ${yamlString(image)}`);
+  if (imageAlt) lines.push(`imageAlt: ${yamlString(imageAlt)}`);
+  if (imageCaption) lines.push(`imageCaption: ${yamlString(imageCaption)}`);
+  lines.push('---', '', body, '');
+  const content = lines.join('\n');
+
+  const message = isEditing
+    ? (draft ? `Update draft: ${title}` : `Update field note: ${title}`)
+    : (draft ? `Save draft: ${title}` : `Publish field note: ${title}`);
   const payload = {
     message,
     content: Buffer.from(content, 'utf8').toString('base64'),
@@ -107,6 +116,7 @@ export default async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     draft,
+    editing: isEditing,
     slug,
     filePath,
     commitSha: result.commit?.sha || null,

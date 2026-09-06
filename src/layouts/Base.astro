@@ -6,6 +6,8 @@ const {
   canonical = Astro.url.pathname
 } = Astro.props;
 const canonicalUrl = new URL(canonical, Astro.site);
+const siteUrl = 'https://www.masahiroiwamatsu.com';
+const amazonAuthorUrl = 'https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP';
 ---
 <!doctype html>
 <html lang="ja">
@@ -13,7 +15,9 @@ const canonicalUrl = new URL(canonical, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f7f3" />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="NOMAD FIELD RSS" href="/rss.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -26,19 +30,31 @@ const canonicalUrl = new URL(canonical, Astro.site);
       '@context': 'https://schema.org',
       '@graph': [
         {
+          '@type': 'Organization',
+          '@id': `${siteUrl}/#strobofactory`,
+          name: 'STROBOFACTORY INC.',
+          alternateName: '株式会社ストロボファクトリー',
+          url: 'https://www.strobofactory.net/'
+        },
+        {
           '@type': 'Person',
-          '@id': 'https://masahiroiwamatsu.com/#person',
+          '@id': `${siteUrl}/#person`,
           name: 'Masahiro Iwamatsu',
           alternateName: '岩松正浩',
-          url: 'https://masahiroiwamatsu.com'
+          url: siteUrl,
+          jobTitle: 'Representative Director / Producer',
+          worksFor: { '@id': `${siteUrl}/#strobofactory` },
+          sameAs: [amazonAuthorUrl],
+          knowsAbout: ['映像制作','AI','業務自動化','iOSアプリ','出版','音楽','ヘルスケア','オンライン教育','コーヒー']
         },
         {
           '@type': 'WebSite',
-          '@id': 'https://masahiroiwamatsu.com/#website',
-          url: 'https://masahiroiwamatsu.com',
+          '@id': `${siteUrl}/#website`,
+          url: siteUrl,
           name: 'NOMAD FIELD',
+          alternateName: 'Masahiro Iwamatsu Official Archive',
           description,
-          publisher: { '@id': 'https://masahiroiwamatsu.com/#person' },
+          publisher: { '@id': `${siteUrl}/#person` },
           inLanguage: 'ja'
         }
       ]
@@ -85,6 +101,9 @@ const canonicalUrl = new URL(canonical, Astro.site);
       .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
       .about-grid h2{font-size:42px;font-weight:700;letter-spacing:-.035em;margin:0}
       .about-grid p{margin:0 0 18px;font-weight:400;line-height:1.9;color:#333}
+      .profile-links{border-top:1px solid var(--line)}
+      .profile-links a{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 0;border-bottom:1px solid var(--line);font-size:14px;font-weight:400}
+      .profile-links a:hover{opacity:.55}
 
       .logo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
       .logo-card{display:flex;flex-direction:column;gap:12px;padding:16px;background:rgba(255,255,255,.5);border:1px solid var(--line);transition:transform .2s ease,background .2s ease}
@@ -113,7 +132,7 @@ const canonicalUrl = new URL(canonical, Astro.site);
     </style>
   </head>
   <body>
-    <header class="header"><div class="wrap header-in"><a class="brand" href="/">NOMAD FIELD</a><nav class="nav"><a href="/notes">NOTES</a><a href="https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP" target="_blank" rel="noopener noreferrer">BOOKS ↗</a><a href="/about">ABOUT</a><a href="/rss.xml">RSS</a></nav></div></header>
+    <header class="header"><div class="wrap header-in"><a class="brand" href="/">NOMAD FIELD</a><nav class="nav"><a href="/notes">NOTES</a><a href={amazonAuthorUrl} target="_blank" rel="noopener noreferrer">BOOKS ↗</a><a href="/about">ABOUT</a><a href="/rss.xml">RSS</a></nav></div></header>
     <slot />
     <footer class="wrap footer"><span>© {new Date().getFullYear()} MASAHIRO IWAMATSU</span><span>Independent field notes for the AI age.</span></footer>
   </body>

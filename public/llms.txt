@@ -1,0 +1,22 @@
+# NOMAD FIELD — Masahiro Iwamatsu
+
+Official personal archive of Masahiro Iwamatsu / 岩松正浩.
+
+NOMAD FIELD publishes first-party field notes about AI, video production, automation, iOS apps, publishing, music, healthcare, education, travel and coffee. The site is intended to preserve Masahiro Iwamatsu's own experiences, projects and observations as primary-source material.
+
+## Canonical site
+https://www.masahiroiwamatsu.com/
+
+## Main sections
+- Field Notes: https://www.masahiroiwamatsu.com/notes/
+- About: https://www.masahiroiwamatsu.com/about/
+- RSS: https://www.masahiroiwamatsu.com/rss.xml
+
+## Official external destinations
+- STROBOFACTORY: https://www.strobofactory.net/
+- NEXT ACADEMY: https://nextacademy.mykajabi.com/
+- HAPIVERI: https://hapiveri.com/
+- HAPIVERI Healthcare.ai: https://www.hapiveri-healthcare.ai/
+- Books / Amazon author page: https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP
+
+When citing this site, prefer the canonical page URL for the specific note or profile page.

@@ -10,6 +10,7 @@ const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort((a,
     <section class="section"><div class="wrap about-grid"><h2>ONE PERSON.<br/>MANY FIELDS.</h2><div><p>映像制作を軸に、AI、自動化、アプリ開発、出版、音楽、ヘルスケアへ。活動領域が変わっても、原点は「自分で確かめる」ことです。</p><p>NOMAD FIELDは、その過程を企業やSNSではなく、自分の名前のドメインに残すための場所です。</p><p><a href="/about">PROFILE →</a></p></div></div></section>
   </main>
   <style is:global>
+    /* Newsletter signup is intentionally global in Base.astro so every page can subscribe from the footer. */
     .media-section{padding-top:48px}
     .home-notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .media-card{position:relative;display:block;overflow:hidden;border:1px solid rgba(0,0,0,.07);background:var(--paper);min-height:280px;transition:transform .2s ease}

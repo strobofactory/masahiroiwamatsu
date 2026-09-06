@@ -3,4 +3,11 @@ import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const notes = (await getCollection('notes', ({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
 ---
-<Base title="FIELD NOTES — Masahiro Iwamatsu"><main><section class="hero"><div class="wrap"><div class="eyebrow">Archive</div><h1>FIELD NOTES</h1></div></section><section class="section"><div class="wrap"><div class="notes">{notes.map((note,i)=><a class="card" href={`/notes/${note.id}/`}><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.map(t=><span>{t}</span>)}</div></div></a>)}</div></div></section></main></Base>
+<Base title="FIELD NOTES — Masahiro Iwamatsu"><main><section class="hero"><div class="wrap"><div class="eyebrow">Archive</div><h1>FIELD NOTES</h1></div></section><section class="section"><div class="wrap"><div class="notes">{notes.map((note,i)=><a class={`card ${note.data.image ? 'card-with-thumb' : ''}`} href={`/notes/${note.id}/`}>{note.data.image && <div class="card-thumb-wrap"><img src={note.data.image} alt={note.data.imageAlt ?? note.data.title} loading="lazy" /></div>}<div class="card-content"><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.map(t=><span>{t}</span>)}</div></div></div></a>)}</div></div></section></main><style is:global>
+.card.card-with-thumb{padding:0;overflow:hidden}
+.card-thumb-wrap{width:100%;aspect-ratio:2.39/1;overflow:hidden;background:#eee}
+.card-thumb-wrap img{width:100%;height:100%;object-fit:cover;margin:0}
+.card-content{display:flex;flex:1;flex-direction:column;justify-content:space-between}
+.card-with-thumb .card-content{min-height:172px;padding:18px 22px 20px}
+.card-with-thumb h3{margin:28px 0 16px}
+</style></Base>

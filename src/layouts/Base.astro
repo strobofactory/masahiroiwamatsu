@@ -10,11 +10,11 @@ const {
 const canonicalUrl = new URL(canonical, Astro.site);
 const imageUrl = image ? new URL(image, Astro.site) : null;
 const officialLinks = [
-  { title: 'BOOKS', href: 'https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP' },
-  { title: 'STROBOFACTORY', href: 'https://www.strobofactory.net/' },
-  { title: 'NEXT ACADEMY', href: 'https://nextacademy.mykajabi.com/' },
-  { title: 'HAPIVERI', href: 'https://hapiveri.com/' },
-  { title: 'HAPIVERI Healthcare.ai', href: 'https://www.hapiveri-healthcare.ai/' }
+  { title: 'BOOKS', href: 'https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP', image: '/logos/books-placeholder.svg', alt: 'BOOKS' },
+  { title: 'STROBOFACTORY', href: 'https://www.strobofactory.net/', image: '/logos/strobofactory-placeholder.svg', alt: 'STROBOFACTORY' },
+  { title: 'NEXT ACADEMY', href: 'https://nextacademy.mykajabi.com/', image: '/logos/next-academy-placeholder.svg', alt: 'NEXT ACADEMY' },
+  { title: 'HAPIVERI', href: 'https://hapiveri.com/', image: '/logos/hapiveri-placeholder.svg', alt: 'HAPIVERI' },
+  { title: 'HAPIVERI Healthcare.ai', href: 'https://www.hapiveri-healthcare.ai/', image: '/logos/hapiveri-healthcare-ai-placeholder.svg', alt: 'HAPIVERI Healthcare.ai' }
 ];
 ---
 <!doctype html>
@@ -130,11 +130,12 @@ const officialLinks = [
       .footer-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:20px}
       .footer-head h2{margin:0;font-size:11px;font-weight:600;letter-spacing:.14em}
       .footer-head span{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
-      .footer-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-      .footer-link{display:flex;justify-content:space-between;gap:12px;padding:16px 14px;border-right:1px solid var(--line);font-size:11px;font-weight:500;line-height:1.4}
-      .footer-link:first-child{padding-left:0}
-      .footer-link:last-child{border-right:0;padding-right:0}
-      .footer-link:hover{opacity:.55}
+      .footer-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+      .footer-link{display:flex;min-width:0;flex-direction:column;gap:10px;padding:10px;border:1px solid var(--line);background:rgba(255,255,255,.38);font-size:11px;font-weight:500;line-height:1.4;transition:transform .2s ease,background .2s ease}
+      .footer-link:hover{transform:translateY(-2px);background:var(--paper)}
+      .footer-logo{width:100%;aspect-ratio:16/10;object-fit:cover;background:#fff;border:1px solid rgba(0,0,0,.05)}
+      .footer-link-label{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+      .footer-link-label span:first-child{overflow-wrap:anywhere}
       .footer-bottom{padding-top:24px;font-size:11px;font-weight:400;color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
       .article{width:min(920px,calc(100% - 36px));margin:0 auto;padding:76px 0}
@@ -152,8 +153,9 @@ const officialLinks = [
       .article-updated{margin-top:-8px;color:var(--muted);font-size:11px}
       .back{font-size:12px;font-weight:400;color:var(--muted)}
 
-      @media(max-width:1080px){.footer-links{grid-template-columns:repeat(3,1fr)}.footer-link{border-bottom:1px solid var(--line)}}
-      @media(max-width:780px){.nav{gap:13px}.hero{padding-top:64px}.about-grid,.newsletter{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.card{min-height:240px}.card h3{margin-top:34px}.about-grid h2,.newsletter h2{font-size:34px}.footer-links{grid-template-columns:1fr}.footer-link,.footer-link:first-child,.footer-link:last-child{padding:14px 0;border-right:0;border-bottom:1px solid var(--line)}.footer-link:last-child{border-bottom:0}}
+      @media(max-width:1080px){.footer-links{grid-template-columns:repeat(3,1fr)}}
+      @media(max-width:780px){.nav{gap:13px}.hero{padding-top:64px}.about-grid,.newsletter{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.card{min-height:240px}.card h3{margin-top:34px}.about-grid h2,.newsletter h2{font-size:34px}.footer-links{grid-template-columns:1fr 1fr}.footer-link{padding:9px}}
+      @media(max-width:520px){.footer-links{grid-template-columns:1fr}}
     </style>
   </head>
   <body>
@@ -164,7 +166,10 @@ const officialLinks = [
         <div class="footer-head"><h2>OFFICIAL LINKS</h2><span>External sites</span></div>
         <div class="footer-links">
           {officialLinks.map((link) => (
-            <a class="footer-link" href={link.href} target="_blank" rel="noopener noreferrer"><span>{link.title}</span><span>↗</span></a>
+            <a class="footer-link" href={link.href} target="_blank" rel="noopener noreferrer" aria-label={`${link.title} を開く`}>
+              <img class="footer-logo" src={link.image} alt={link.alt} loading="lazy" />
+              <div class="footer-link-label"><span>{link.title}</span><span>↗</span></div>
+            </a>
           ))}
         </div>
         <div class="footer-bottom"><span>© {new Date().getFullYear()} MASAHIRO IWAMATSU</span><span>Independent field notes for the AI age.</span></div>

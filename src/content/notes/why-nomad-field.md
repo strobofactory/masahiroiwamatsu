@@ -2,9 +2,13 @@
 title: "なぜ、いま自分の名前のドメインに書くのか"
 description: "AI時代に、一般情報ではなく自分自身の一次情報を残すために。NOMAD FIELDを始める理由。"
 pubDate: 2026-09-06
+updatedDate: 2026-09-06
 tags: ["AI", "Media", "Archive"]
 draft: false
+image: "https://nomad-field-media.b-cdn.net/notes/why-nomad-field/1788700213218-Barcelona_00003.webp"
+imageAlt: "なぜ、いま自分の名前のドメインに書くのか"
 ---
+
 AIが文章を書き、検索結果そのものを要約する時代に、ブログを書く意味は以前とは変わりました。
 
 一般的な情報を整理して公開するだけなら、AIの方が速い。だからここでは、誰でも生成できる情報ではなく、**自分が実際に見たこと、作ったこと、試したこと、失敗したこと**を残します。

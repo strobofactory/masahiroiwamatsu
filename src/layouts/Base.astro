@@ -139,6 +139,8 @@ const officialLinks = [
       .footer-logo{width:100%;aspect-ratio:16/10;object-fit:cover;background:#fff;border:1px solid rgba(0,0,0,.05)}
       .footer-link-label{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
       .footer-link-label span:first-child{overflow-wrap:anywhere}
+      .footer-newsletter{margin-top:22px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:center;font-size:12px;font-weight:600;letter-spacing:.04em}
+      .footer-newsletter:hover{opacity:.55}
       .footer-bottom{padding-top:24px;font-size:11px;font-weight:400;color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
       .article{width:min(920px,calc(100% - 36px));margin:0 auto;padding:76px 0}
@@ -175,6 +177,7 @@ const officialLinks = [
             </a>
           ))}
         </div>
+        <a class="footer-newsletter" href="/#newsletter"><span>NEWSLETTER / メールマガジン登録</span><span>→</span></a>
         <div class="footer-bottom"><span>© {new Date().getFullYear()} MASAHIRO IWAMATSU</span><span>Independent field notes for the AI age.</span></div>
       </div>
     </footer>

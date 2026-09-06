@@ -10,7 +10,17 @@ const notes = defineCollection({
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
-    image: z.string().optional()
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    imageCaption: z.string().optional()
+  }).superRefine((data, ctx) => {
+    if (data.image && !data.imageAlt) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['imageAlt'],
+        message: 'image を指定する場合は imageAlt も指定してください。'
+      });
+    }
   })
 });
 

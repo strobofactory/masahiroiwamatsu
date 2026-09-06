@@ -1,11 +1,69 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
+
 export async function getStaticPaths(){
   const notes = await getCollection('notes', ({data})=>!data.draft);
   return notes.map(note=>({params:{id:note.id},props:{note}}));
 }
+
 const { note } = Astro.props;
 const { Content } = await render(note);
+const canonicalPath = `/notes/${note.id}/`;
+const canonicalUrl = new URL(canonicalPath, Astro.site).href;
+const imageUrl = note.data.image ? new URL(note.data.image, Astro.site).href : undefined;
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${canonicalUrl}#article`,
+  headline: note.data.title,
+  description: note.data.description,
+  datePublished: note.data.pubDate.toISOString(),
+  dateModified: (note.data.updatedDate ?? note.data.pubDate).toISOString(),
+  mainEntityOfPage: canonicalUrl,
+  url: canonicalUrl,
+  inLanguage: 'ja',
+  author: {
+    '@type': 'Person',
+    '@id': 'https://www.masahiroiwamatsu.com/#person',
+    name: 'Masahiro Iwamatsu',
+    alternateName: '岩松正浩',
+    url: 'https://www.masahiroiwamatsu.com/about/'
+  },
+  publisher: {
+    '@type': 'Person',
+    '@id': 'https://www.masahiroiwamatsu.com/#person',
+    name: 'Masahiro Iwamatsu'
+  },
+  keywords: note.data.tags.join(', '),
+  ...(imageUrl ? { image: imageUrl } : {})
+};
 ---
-<Base title={`${note.data.title} — NOMAD FIELD`} description={note.data.description} canonical={`/notes/${note.id}/`}><article class="article"><a class="back" href="/notes">← FIELD NOTES</a><div class="eyebrow">{note.data.pubDate.toLocaleDateString('ja-JP')} / {note.data.tags.join(' · ')}</div><h1>{note.data.title}</h1><p class="lead">{note.data.description}</p><div class="content"><Content /></div></article></Base>
+<Base
+  title={`${note.data.title} — NOMAD FIELD`}
+  description={note.data.description}
+  canonical={canonicalPath}
+  ogType="article"
+  image={note.data.image}
+>
+  <article class="article">
+    <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)}></script>
+    <a class="back" href="/notes">← FIELD NOTES</a>
+    <div class="eyebrow">
+      <time datetime={note.data.pubDate.toISOString()}>{note.data.pubDate.toLocaleDateString('ja-JP')}</time>
+      {note.data.tags.length > 0 && <> / {note.data.tags.join(' · ')}</>}
+    </div>
+    <h1>{note.data.title}</h1>
+    <p class="lead">{note.data.description}</p>
+    {note.data.updatedDate && (
+      <p class="article-updated">UPDATED {note.data.updatedDate.toLocaleDateString('ja-JP')}</p>
+    )}
+    {note.data.image && (
+      <figure class="article-cover">
+        <img src={note.data.image} alt={note.data.imageAlt ?? ''} />
+        {note.data.imageCaption && <figcaption>{note.data.imageCaption}</figcaption>}
+      </figure>
+    )}
+    <div class="content"><Content /></div>
+  </article>
+</Base>

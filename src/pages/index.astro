@@ -2,6 +2,38 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf()).slice(0,6);
+const officialLinks = [
+  {
+    title: 'BOOKS',
+    href: 'https://www.amazon.co.jp/stores/%E5%B2%A9%E6%9D%BE-%E6%AD%A3%E6%B5%A9/author/B07WFF6CRP',
+    image: '/logos/books-placeholder.svg',
+    alt: 'BOOKS placeholder logo'
+  },
+  {
+    title: 'STROBOFACTORY',
+    href: 'https://www.strobofactory.net/',
+    image: '/logos/strobofactory-placeholder.svg',
+    alt: 'STROBOFACTORY placeholder logo'
+  },
+  {
+    title: 'NEXT ACADEMY',
+    href: 'https://nextacademy.mykajabi.com/',
+    image: '/logos/next-academy-placeholder.svg',
+    alt: 'NEXT ACADEMY placeholder logo'
+  },
+  {
+    title: 'HAPIVERI',
+    href: 'https://hapiveri.com/',
+    image: '/logos/hapiveri-placeholder.svg',
+    alt: 'HAPIVERI placeholder logo'
+  },
+  {
+    title: 'HAPIVERI Healthcare.ai',
+    href: 'https://www.hapiveri-healthcare.ai/',
+    image: '/logos/hapiveri-healthcare-ai-placeholder.svg',
+    alt: 'HAPIVERI Healthcare.ai placeholder logo'
+  }
+];
 ---
 <Base>
   <main>
@@ -9,11 +41,13 @@ const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort((a,
     <section class="section"><div class="wrap"><div class="section-head"><h2>FIELD NOTES</h2><a href="/notes">VIEW ALL →</a></div><div class="notes">{notes.map((note,i)=><a class="card" href={`/notes/${note.id}/`}><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.slice(0,3).map(t=><span>{t}</span>)}</div></div></a>)}</div></div></section>
     <section class="section"><div class="wrap about-grid"><h2>ONE PERSON.<br/>MANY FIELDS.</h2><div><p>映像制作を軸に、AI、自動化、アプリ開発、出版、音楽、ヘルスケアへ。活動領域が変わっても、原点は「自分で確かめる」ことです。</p><p>NOMAD FIELDは、その過程を企業やSNSではなく、自分の名前のドメインに残すための場所です。</p><p><a href="/about">PROFILE →</a></p></div></div></section>
 
-    <section class="section"><div class="wrap"><div class="section-head"><h2>SERVICES & PROJECTS</h2><span class="eyebrow" style="margin:0">External sites</span></div><div class="services">
-      <a class="service" href="https://www.strobofactory.net/" target="_blank" rel="noopener noreferrer"><small>01 / CREATIVE & AI</small><strong>STROBOFACTORY</strong><span>Visit site ↗</span></a>
-      <a class="service" href="https://nextacademy.mykajabi.com/" target="_blank" rel="noopener noreferrer"><small>02 / EDUCATION</small><strong>NEXT ACADEMY</strong><span>Visit site ↗</span></a>
-      <a class="service" href="https://hapiveri.com/" target="_blank" rel="noopener noreferrer"><small>03 / MEDIA & LIFESTYLE</small><strong>HAPIVERI</strong><span>Visit site ↗</span></a>
-      <a class="service" href="https://www.hapiveri-healthcare.ai/" target="_blank" rel="noopener noreferrer"><small>04 / HEALTHCARE × AI</small><strong>HAPIVERI Healthcare.ai</strong><span>Visit site ↗</span></a>
+    <section class="section"><div class="wrap"><div class="section-head"><h2>OFFICIAL LINKS</h2><span class="eyebrow" style="margin:0">External sites</span></div><div class="logo-grid">
+      {officialLinks.map((link) => (
+        <a class="logo-card" href={link.href} target="_blank" rel="noopener noreferrer" aria-label={`${link.title} を開く`}>
+          <img src={link.image} alt={link.alt} loading="lazy" />
+          <span>{link.title} ↗</span>
+        </a>
+      ))}
     </div></div></section>
     <section class="section"><div class="wrap newsletter"><div><div class="eyebrow">Newsletter</div><h2>NEW NOTES,<br/>DIRECT.</h2><p>新しい記事と活動の記録をメールで届けます。Mailchimpの購読URLは公開前に接続します。</p></div><div class="eyebrow" style="margin:0">Mailchimp / connection pending</div></div></section>
   </main>

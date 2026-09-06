@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-labelledby="title desc">
+  <title id="title">BOOKS placeholder</title>
+  <desc id="desc">Temporary placeholder image for books link</desc>
+  <rect width="640" height="400" fill="#f6f6f1"/>
+  <rect x="22" y="22" width="596" height="356" rx="18" fill="#ffffff" stroke="#d9d9d2" stroke-width="2"/>
+  <path d="M80 318V92h34l70 84 70-84h34v226h-30V137l-71 82-73-82v181H80Z" fill="#111" opacity=".95"/>
+  <text x="488" y="168" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="52" letter-spacing="6" fill="#111">BOOKS</text>
+  <text x="488" y="216" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" letter-spacing="4" fill="#777">AMAZON AUTHOR PAGE</text>
+</svg>

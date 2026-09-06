@@ -1,0 +1,268 @@
+---
+---
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="theme-color" content="#f7f7f3" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <title>NOMAD FIELD Studio</title>
+  <style>
+    :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34;--warn:#8b5a00}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif;font-weight:400}
+    button,input,textarea{font:inherit}.shell{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+    .brand{font-size:15px;font-weight:700;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase}.panel{background:var(--paper);border:1px solid var(--line);padding:24px;margin-top:22px}.hidden{display:none!important}
+    h1{font-size:clamp(38px,7vw,76px);font-weight:700;letter-spacing:-.045em;line-height:.95;margin:14px 0 28px}h2{font-size:12px;letter-spacing:.14em;margin:0 0 18px}.hint{color:var(--muted);font-size:12px;line-height:1.7}
+    .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.btn.danger{background:transparent;color:#777;border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
+    .status{font-size:12px;line-height:1.7;margin-top:12px;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.service{border:1px solid var(--line);padding:10px;font-size:11px}.service.ok{color:var(--ok)}.service.warn{color:var(--warn)}
+    .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px}.thumb{width:72px;height:54px;object-fit:cover;background:#eee}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
+    .cover{display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:start}.cover img{width:160px;aspect-ratio:16/10;object-fit:cover;background:#eee;border:1px solid var(--line)}.code-note{font-size:11px;color:var(--muted);padding:12px;border-left:1px solid #111;margin:14px 0}
+    @media(max-width:760px){.grid,.service-grid,.cover{grid-template-columns:1fr}.media-item{grid-template-columns:54px 1fr}.media-item>div:last-child{grid-column:1/-1}.thumb{width:54px;height:44px}.top{align-items:flex-start}.shell{padding-top:22px}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top"><div><div class="brand">NOMAD FIELD</div><div class="sub">Private publishing studio</div></div><a href="/" style="font-size:12px;color:#777;text-decoration:none">SITE ↗</a></div>
+
+    <section id="loginPanel" class="panel hidden">
+      <div class="sub">Private</div><h1>STUDIO</h1>
+      <div class="field"><label>STUDIO PASSWORD</label><input id="password" type="password" autocomplete="current-password" /></div>
+      <div class="actions"><button id="loginBtn" class="btn">LOGIN</button></div><div id="loginStatus" class="status"></div>
+    </section>
+
+    <main id="editor" class="hidden">
+      <section class="panel">
+        <div class="sub">System</div><h1>WRITE.<br>DROP.<br>PUBLISH.</h1>
+        <div class="hint">Claudeで作った文章を貼り、写真や動画をここへ落とします。GitHubやBunnyの管理画面を普段開く必要はありません。</div>
+        <div id="services" class="service-grid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>CLAUDE DRAFT</h2>
+        <div class="hint">Claudeの完成原稿をそのまま貼れます。「タイトル:」「概要:」「タグ:」「本文:」の形式なら自動で各欄へ分けます。</div>
+        <div class="field"><textarea id="claudeRaw" placeholder="タイトル: ...\n概要: ...\nタグ: AI, Video\n本文:\n..."></textarea></div>
+        <div class="actions"><button id="parseBtn" class="btn secondary">原稿を取り込む</button><button id="clearRawBtn" class="btn secondary">貼り付け欄をクリア</button></div>
+      </section>
+
+      <section class="panel">
+        <h2>ARTICLE</h2>
+        <div class="field"><label>TITLE</label><input id="title" /></div>
+        <div class="field"><label>DESCRIPTION</label><textarea id="description" style="min-height:92px"></textarea></div>
+        <div class="grid">
+          <div class="field"><label>SLUG（英数字）</label><input id="slug" placeholder="field-note-20260906" /></div>
+          <div class="field"><label>TAGS（カンマ区切り）</label><input id="tags" placeholder="AI, Video, Field Note" /></div>
+        </div>
+        <div class="field"><label>BODY / MARKDOWN</label><textarea id="body" class="body"></textarea></div>
+      </section>
+
+      <section class="panel">
+        <h2>PHOTOS & VIDEO</h2>
+        <div id="dropzone" class="drop"><strong>写真・動画をここにドロップ</strong><span class="hint">写真は自動でWeb用に縮小・圧縮。動画はBunny Streamへ直接アップロードします。</span><input id="fileInput" type="file" accept="image/*,video/*" multiple hidden /></div>
+        <div id="mediaList" class="media-list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>COVER IMAGE</h2>
+        <div class="cover"><img id="coverPreview" alt="" /><div><div class="field"><label>IMAGE URL</label><input id="coverImage" /></div><div class="field"><label>ALT</label><input id="coverAlt" /></div><div class="field"><label>CAPTION</label><input id="coverCaption" /></div></div></div>
+      </section>
+
+      <section class="panel">
+        <h2>PUBLISH</h2>
+        <div class="code-note">「下書き保存」はWebに表示しません。「公開」はGitHubへコミット後、Vercelの本番反映まで通常少し待ちます。</div>
+        <div class="actions"><button id="draftBtn" class="btn secondary">下書き保存</button><button id="publishBtn" class="btn">公開</button><button id="logoutBtn" class="btn danger">ログアウト</button></div>
+        <div id="publishStatus" class="status"></div>
+      </section>
+    </main>
+  </div>
+
+<script type="module" is:inline>
+  import * as tus from 'https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/+esm';
+
+  const $ = (id) => document.getElementById(id);
+  const loginPanel = $('loginPanel');
+  const editor = $('editor');
+  const servicesEl = $('services');
+  const mediaList = $('mediaList');
+  const bodyEl = $('body');
+  let serviceState = {};
+
+  function fallbackSlug() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2,'0');
+    return `field-note-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+  }
+
+  function slugify(value) {
+    const slug = String(value || '').normalize('NFKD').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,100);
+    return slug || fallbackSlug();
+  }
+
+  async function checkSession() {
+    const res = await fetch('/api/studio/session', { cache:'no-store' });
+    const data = await res.json();
+    serviceState = data.services || {};
+    if (!data.configured) {
+      loginPanel.classList.remove('hidden');
+      $('loginStatus').textContent = 'Studioの初期設定がまだ完了していません。Vercel Environment Variablesを設定してください。';
+      return;
+    }
+    if (data.authenticated) showEditor(); else loginPanel.classList.remove('hidden');
+  }
+
+  function showEditor() {
+    loginPanel.classList.add('hidden'); editor.classList.remove('hidden'); renderServices();
+  }
+
+  function renderServices() {
+    const items = [
+      ['GitHub / Article', serviceState.github],
+      ['Bunny Storage / Photo', serviceState.bunnyStorage],
+      ['Bunny Stream / Video', serviceState.bunnyStream]
+    ];
+    servicesEl.innerHTML = items.map(([name,ok]) => `<div class="service ${ok?'ok':'warn'}">${ok?'●':'○'} ${name}<br>${ok?'READY':'SETUP REQUIRED'}</div>`).join('');
+  }
+
+  $('loginBtn').addEventListener('click', async () => {
+    $('loginStatus').textContent = '確認中…';
+    const res = await fetch('/api/studio/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok) { $('loginStatus').textContent = data.error || 'ログインできませんでした。'; return; }
+    const session = await fetch('/api/studio/session',{cache:'no-store'}).then(r=>r.json());
+    serviceState = session.services || {}; showEditor();
+  });
+
+  $('logoutBtn').addEventListener('click', async () => { await fetch('/api/studio/logout',{method:'POST'}); location.reload(); });
+
+  $('parseBtn').addEventListener('click', () => {
+    const raw = $('claudeRaw').value.trim();
+    if (!raw) return;
+    const get = (labels, untilLabels=[]) => {
+      const escaped = labels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+      const until = untilLabels.length ? `(?=\\n(?:${untilLabels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})\\s*[:：]|$)` : '$';
+      const m = raw.match(new RegExp(`(?:^|\\n)(?:${escaped})\\s*[:：]\\s*([\\s\\S]*?)${until}`,'i'));
+      return m ? m[1].trim() : '';
+    };
+    const title = get(['タイトル','Title'],['概要','Description','タグ','Tags','本文','Body']);
+    const description = get(['概要','Description'],['タグ','Tags','本文','Body']);
+    const tags = get(['タグ','Tags'],['本文','Body']);
+    const body = get(['本文','Body']);
+    if (title) $('title').value = title;
+    if (description) $('description').value = description;
+    if (tags) $('tags').value = tags.replace(/[、]/g,',');
+    bodyEl.value = body || raw;
+    if (!$('slug').value) $('slug').value = slugify(title);
+  });
+  $('clearRawBtn').addEventListener('click',()=>{$('claudeRaw').value='';});
+  $('title').addEventListener('blur',()=>{ if (!$('slug').value) $('slug').value=slugify($('title').value); });
+
+  function insertAtCursor(text) {
+    const start = bodyEl.selectionStart ?? bodyEl.value.length;
+    const end = bodyEl.selectionEnd ?? start;
+    const before = bodyEl.value.slice(0,start);
+    const after = bodyEl.value.slice(end);
+    const prefix = before && !before.endsWith('\n\n') ? (before.endsWith('\n')?'\n':'\n\n') : '';
+    const suffix = after && !after.startsWith('\n') ? '\n\n' : '\n';
+    bodyEl.value = before + prefix + text + suffix + after;
+    bodyEl.focus();
+  }
+
+  async function compressImage(file) {
+    const bitmap = await createImageBitmap(file);
+    const max = 2400;
+    const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d',{alpha:false}).drawImage(bitmap,0,0,canvas.width,canvas.height);
+    bitmap.close?.();
+    const make = (q) => new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));
+    let blob = await make(.84);
+    for (const q of [.76,.68,.60]) { if (blob.size <= 3.4*1024*1024) break; blob = await make(q); }
+    if (blob.size > 3.8*1024*1024) throw new Error('画像を十分に圧縮できませんでした。');
+    const base = file.name.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9_-]+/g,'-') || 'image';
+    return { blob, name:`${base}.webp` };
+  }
+
+  function addMediaCard({type,name,url,markdown,progress=false}) {
+    const item = document.createElement('div'); item.className='media-item';
+    const visual = type==='image' ? `<img class="thumb" src="${url}" alt="">` : `<div class="thumb" style="display:grid;place-items:center;font-size:10px">VIDEO</div>`;
+    item.innerHTML = `${visual}<div><div class="media-name">${name}</div><div class="media-meta">${url||'uploading…'}</div>${progress?'<div class="progress"><span></span></div>':''}</div><div></div>`;
+    mediaList.prepend(item);
+    if (markdown) attachMediaButtons(item,{type,url,markdown});
+    return item;
+  }
+
+  function attachMediaButtons(item,{type,url,markdown}) {
+    const box=item.lastElementChild; box.innerHTML='';
+    const insert=document.createElement('button');insert.className='mini';insert.textContent='本文に挿入';insert.onclick=()=>insertAtCursor(markdown);box.appendChild(insert);
+    if(type==='image'){
+      const cover=document.createElement('button');cover.className='mini';cover.textContent='カバーに設定';cover.onclick=()=>{$('coverImage').value=url;$('coverPreview').src=url;if(!$('coverAlt').value)$('coverAlt').value=$('title').value;};box.appendChild(cover);
+    }
+  }
+
+  async function uploadImage(file) {
+    if (!serviceState.bunnyStorage) throw new Error('Bunny Storageの設定がまだです。');
+    const {blob,name}=await compressImage(file);
+    const slug=$('slug').value || fallbackSlug();
+    const res=await fetch(`/api/studio/image-upload?slug=${encodeURIComponent(slug)}&name=${encodeURIComponent(name)}`,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:blob});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(data.error||'画像アップロードに失敗しました。');
+    const alt=$('title').value||'NOMAD FIELD image';
+    const markdown=`![${alt}](${data.url})`;
+    addMediaCard({type:'image',name:file.name,url:data.url,markdown});
+    if(!$('coverImage').value){$('coverImage').value=data.url;$('coverPreview').src=data.url;$('coverAlt').value=alt;}
+  }
+
+  async function uploadVideo(file) {
+    if (!serviceState.bunnyStream) throw new Error('Bunny Streamの設定がまだです。');
+    const sigRes=await fetch('/api/studio/video-signature',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:file.name})});
+    const sig=await sigRes.json().catch(()=>({}));
+    if(!sigRes.ok) throw new Error(sig.error||'動画アップロードを開始できませんでした。');
+    const item=addMediaCard({type:'video',name:file.name,url:'Bunny Stream',progress:true});
+    const bar=item.querySelector('.progress span'); const meta=item.querySelector('.media-meta');
+    await new Promise((resolve,reject)=>{
+      const upload=new tus.Upload(file,{
+        endpoint:sig.endpoint,
+        retryDelays:[0,1000,3000,5000,10000],
+        chunkSize:25*1024*1024,
+        headers:{AuthorizationSignature:sig.signature,AuthorizationExpire:String(sig.expiresAt),VideoId:sig.videoId,LibraryId:String(sig.libraryId)},
+        metadata:{filename:file.name,filetype:file.type,title:file.name},
+        onError:reject,
+        onProgress:(sent,total)=>{const pct=Math.round(sent/total*100);bar.style.width=`${pct}%`;meta.textContent=`アップロード ${pct}%`;},
+        onSuccess:()=>resolve()
+      });
+      upload.findPreviousUploads().then(prev=>{if(prev.length)upload.resumeFromPreviousUpload(prev[0]);upload.start();});
+    });
+    meta.textContent=`アップロード完了 / エンコード中 · ${sig.videoId}`;bar.style.width='100%';attachMediaButtons(item,{type:'video',url:sig.embedUrl,markdown:sig.markdown});
+  }
+
+  async function processFiles(files) {
+    for (const file of files) {
+      try { if(file.type.startsWith('image/')) await uploadImage(file); else if(file.type.startsWith('video/')) await uploadVideo(file); }
+      catch(e){ const item=addMediaCard({type:file.type.startsWith('video/')?'video':'image',name:file.name,url:'ERROR'});item.querySelector('.media-meta').textContent=e.message; }
+    }
+  }
+
+  const drop=$('dropzone'), input=$('fileInput'); drop.onclick=()=>input.click(); input.onchange=()=>processFiles([...input.files]);
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
+  drop.addEventListener('drop',e=>processFiles([...e.dataTransfer.files]));
+  $('coverImage').addEventListener('input',()=>{$('coverPreview').src=$('coverImage').value;});
+
+  async function save(draft) {
+    const status=$('publishStatus'); status.textContent=draft?'下書きを保存中…':'公開用コミットを作成中…';
+    const payload={title:$('title').value.trim(),description:$('description').value.trim(),slug:$('slug').value.trim()||fallbackSlug(),tags:$('tags').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean),body:bodyEl.value.trim(),image:$('coverImage').value.trim(),imageAlt:$('coverAlt').value.trim(),imageCaption:$('coverCaption').value.trim(),draft};
+    const res=await fetch('/api/studio/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok){status.textContent=data.error||'保存に失敗しました。';return;}
+    $('slug').value=data.slug;
+    status.innerHTML=draft?`下書きを保存しました。<br>GitHub: ${data.filePath}`:`公開コミットを作成しました。Vercel反映後: <a href="${data.url}" target="_blank">${data.url}</a>`;
+  }
+  $('draftBtn').onclick=()=>save(true); $('publishBtn').onclick=()=>save(false);
+
+  checkSession().catch(e=>{loginPanel.classList.remove('hidden');$('loginStatus').textContent=e.message;});
+</script>
+</body>
+</html>

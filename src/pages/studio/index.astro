@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#f7f7f3" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <title>NOMAD FIELD Studio</title>
-  <style>
+  <style is:global>
     :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34;--warn:#8b5a00}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif;font-weight:400}
     button,input,textarea{font:inherit}.shell{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
@@ -18,9 +18,9 @@
     .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.btn.danger{background:transparent;color:#777;border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
     .status{font-size:12px;line-height:1.7;margin-top:12px;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.service{border:1px solid var(--line);padding:10px;font-size:11px}.service.ok{color:var(--ok)}.service.warn{color:var(--warn)}
-    .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px}.thumb{width:72px;height:54px;object-fit:cover;background:#eee}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
+    .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px;overflow:hidden}.thumb{display:block;width:96px!important;height:72px!important;max-width:96px!important;max-height:72px!important;object-fit:cover!important;background:#eee;overflow:hidden}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
     .cover{display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:start}.cover img{width:160px;aspect-ratio:16/10;object-fit:cover;background:#eee;border:1px solid var(--line)}.code-note{font-size:11px;color:var(--muted);padding:12px;border-left:1px solid #111;margin:14px 0}
-    @media(max-width:760px){.grid,.service-grid,.cover{grid-template-columns:1fr}.media-item{grid-template-columns:54px 1fr}.media-item>div:last-child{grid-column:1/-1}.thumb{width:54px;height:44px}.top{align-items:flex-start}.shell{padding-top:22px}}
+    @media(max-width:760px){.grid,.service-grid,.cover{grid-template-columns:1fr}.media-item{grid-template-columns:72px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:72px!important;height:54px!important;max-width:72px!important;max-height:54px!important}.top{align-items:flex-start}.shell{padding-top:22px}}
   </style>
 </head>
 <body>
@@ -43,7 +43,7 @@
       <section class="panel">
         <h2>CLAUDE DRAFT</h2>
         <div class="hint">Claudeの完成原稿をそのまま貼れます。「タイトル:」「概要:」「タグ:」「本文:」の形式なら自動で各欄へ分けます。</div>
-        <div class="field"><textarea id="claudeRaw" placeholder="タイトル: ...\n概要: ...\nタグ: AI, Video\n本文:\n..."></textarea></div>
+        <div class="field"><textarea id="claudeRaw" placeholder="タイトル: ...&#10;概要: ...&#10;タグ: AI, Video&#10;本文:&#10;..."></textarea></div>
         <div class="actions"><button id="parseBtn" class="btn secondary">原稿を取り込む</button><button id="clearRawBtn" class="btn secondary">貼り付け欄をクリア</button></div>
       </section>
 
@@ -141,8 +141,8 @@
     if (!raw) return;
     const get = (labels, untilLabels=[]) => {
       const escaped = labels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
-      const until = untilLabels.length ? `(?=\\n(?:${untilLabels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})\\s*[:：]|$)` : '$';
-      const m = raw.match(new RegExp(`(?:^|\\n)(?:${escaped})\\s*[:：]\\s*([\\s\\S]*?)${until}`,'i'));
+      const until = untilLabels.length ? `(?=\n(?:${untilLabels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})\s*[:：]|$)` : '$';
+      const m = raw.match(new RegExp(`(?:^|\n)(?:${escaped})\s*[:：]\s*([\s\S]*?)${until}`,'i'));
       return m ? m[1].trim() : '';
     };
     const title = get(['タイトル','Title'],['概要','Description','タグ','Tags','本文','Body']);

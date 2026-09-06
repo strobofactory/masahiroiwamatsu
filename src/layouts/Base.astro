@@ -1,7 +1,8 @@
 ---
+const defaultDescription = 'AI、映像、健康、アプリ、旅、コーヒー、出版。分野ではなく、実際に見て、作って、試したことを記録する。これは情報を量産するブログではなく、岩松正浩の一次情報を長期保存するためのフィールドノートです。';
 const {
   title = 'NOMAD FIELD — Masahiro Iwamatsu',
-  description = 'Masahiro Iwamatsu の公式アーカイブ。AI、映像、健康、アプリ、旅、コーヒー、出版についてのフィールドノート。',
+  description = defaultDescription,
   canonical = Astro.url.pathname
 } = Astro.props;
 const canonicalUrl = new URL(canonical, Astro.site);
@@ -36,6 +37,7 @@ const canonicalUrl = new URL(canonical, Astro.site);
           '@id': 'https://masahiroiwamatsu.com/#website',
           url: 'https://masahiroiwamatsu.com',
           name: 'NOMAD FIELD',
+          description,
           publisher: { '@id': 'https://masahiroiwamatsu.com/#person' },
           inLanguage: 'ja'
         }
@@ -67,8 +69,6 @@ const canonicalUrl = new URL(canonical, Astro.site);
       .hero{padding:88px 0 72px;border-bottom:1px solid var(--line)}
       .eyebrow{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
       .hero h1{font-size:clamp(46px,8vw,110px);font-weight:800;line-height:.92;letter-spacing:-.05em;margin:0;max-width:1000px}
-      .hero-copy{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
-      .hero-copy p{margin:0;font-size:15px;font-weight:400;line-height:1.9;max-width:560px}
 
       .section{padding:54px 0;border-bottom:1px solid var(--line)}
       .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px}
@@ -109,7 +109,7 @@ const canonicalUrl = new URL(canonical, Astro.site);
       .back{font-size:12px;font-weight:400;color:var(--muted)}
 
       @media(max-width:1080px){.logo-grid{grid-template-columns:repeat(3,1fr)}}
-      @media(max-width:780px){.nav{gap:13px}.hero{padding-top:64px}.hero-copy,.about-grid,.newsletter{grid-template-columns:1fr}.notes,.logo-grid{grid-template-columns:1fr}.card{min-height:240px}.card h3{margin-top:34px}.about-grid h2,.newsletter h2{font-size:34px}}
+      @media(max-width:780px){.nav{gap:13px}.hero{padding-top:64px}.about-grid,.newsletter{grid-template-columns:1fr}.notes,.logo-grid{grid-template-columns:1fr}.card{min-height:240px}.card h3{margin-top:34px}.about-grid h2,.newsletter h2{font-size:34px}}
     </style>
   </head>
   <body>

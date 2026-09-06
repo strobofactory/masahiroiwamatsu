@@ -1,0 +1,6 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const notes = (await getCollection('notes', ({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+---
+<Base title="FIELD NOTES — Masahiro Iwamatsu"><main><section class="hero"><div class="wrap"><div class="eyebrow">Archive</div><h1>FIELD NOTES</h1></div></section><section class="section"><div class="wrap"><div class="notes">{notes.map((note,i)=><a class="card" href={`/notes/${note.id}/`}><div class="num">#{String(notes.length-i).padStart(3,'0')}</div><div><h3>{note.data.title}</h3><div class="meta"><span>{note.data.pubDate.toLocaleDateString('ja-JP')}</span>{note.data.tags.map(t=><span>{t}</span>)}</div></div></a>)}</div></div></section></main></Base>

@@ -8,517 +8,79 @@
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta name="theme-color" content="#f7f7f3" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <title>NOMAD FIELD Studio</title>
-  <style is:global>
-    :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34;--warn:#8b5a00}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif;font-weight:400}
-    button,input,textarea,select{font:inherit}.shell{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
-    .brand{font-size:15px;font-weight:700;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase}.panel{background:var(--paper);border:1px solid var(--line);padding:24px;margin-top:22px}.hidden{display:none!important}
-    h1{font-size:clamp(38px,7vw,76px);font-weight:700;letter-spacing:-.045em;line-height:.95;margin:14px 0 28px}h2{font-size:12px;letter-spacing:.14em;margin:0 0 18px}.hint{color:var(--muted);font-size:12px;line-height:1.7}
-    .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field input:disabled{background:#f3f3ef;color:#888}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.btn.danger{background:transparent;color:#777;border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
-    .status{font-size:12px;line-height:1.7;margin-top:12px;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.service{border:1px solid var(--line);padding:10px;font-size:11px}.service.ok{color:var(--ok)}.service.warn{color:var(--warn)}
-    .article-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.article-mode{font-size:11px;color:var(--muted);margin-top:9px}.article-mode strong{color:var(--ink);font-weight:600}.article-history{display:grid;gap:0;margin-top:18px;border-top:1px solid var(--line)}.history-item{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;border-bottom:1px solid var(--line);background:#fff}.history-item.active{background:#f3f3ee}.history-edit{appearance:none;border:0;background:transparent;text-align:left;padding:15px 14px;cursor:pointer;min-width:0}.history-edit:hover{background:#f8f8f4}.history-top{display:flex;gap:10px;align-items:center;margin-bottom:6px}.history-state{font-size:9px;letter-spacing:.12em;border:1px solid var(--line);padding:3px 6px;color:var(--muted);white-space:nowrap}.history-state.public{color:var(--ok)}.history-date{font-size:10px;color:var(--muted)}.history-title{display:block;font-size:14px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}.history-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:var(--muted)}.history-open{display:flex;align-items:center;justify-content:center;min-width:62px;padding:12px;border-left:1px solid var(--line);font-size:10px;color:var(--muted);text-decoration:none}.history-open:hover{background:#f8f8f4;color:var(--ink)}.history-empty{padding:18px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
-    .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.crop-note{margin-top:8px;font-size:10px;line-height:1.6;color:var(--muted)}
-    .media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:112px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px;overflow:hidden}.thumb{display:block;width:112px!important;height:47px!important;max-width:112px!important;max-height:47px!important;object-fit:cover!important;background:#eee;overflow:hidden}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
-    .cover{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}.cover img{width:220px;aspect-ratio:2.39/1;object-fit:cover;background:#eee;border:1px solid var(--line)}.code-note{font-size:11px;color:var(--muted);padding:12px;border-left:1px solid #111;margin:14px 0}
-    @media(max-width:760px){.grid,.service-grid,.cover,.article-picker{grid-template-columns:1fr}.media-item{grid-template-columns:96px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:96px!important;height:40px!important;max-width:96px!important;max-height:40px!important}.top{align-items:flex-start}.shell{padding-top:22px}.cover img{width:100%;max-width:260px}.history-edit{padding:13px 10px}.history-open{min-width:52px;padding:10px}.history-title{font-size:13px}}
+  <title>NOMAD FIELD Studio — Articles</title>
+  <style>
+    :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif}button,input{font:inherit}a{color:inherit;text-decoration:none}.shell{width:min(1040px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:22px;border-bottom:1px solid var(--line)}.brand{font-size:15px;font-weight:700;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}.top-links{display:flex;gap:10px;align-items:center}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.panel{background:var(--paper);border:1px solid var(--line);padding:24px;margin-top:22px}.hidden{display:none!important}.hero{padding:42px 0 18px}.eyebrow{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}.hero h1{font-size:clamp(42px,8vw,80px);line-height:.95;letter-spacing:-.045em;margin:14px 0 18px}.hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.8}.status{font-size:12px;color:var(--muted);line-height:1.7;margin-top:12px}.article-list{display:grid;border-top:1px solid var(--line);margin-top:18px}.article-row{display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:stretch;border-bottom:1px solid var(--line);background:#fff}.article-row:hover{background:#f8f8f4}.article-main{padding:17px 18px;min-width:0}.article-date{padding:18px 0 18px 14px;font-size:10px;color:var(--muted);white-space:nowrap}.article-state{display:inline-block;font-size:9px;letter-spacing:.1em;border:1px solid var(--line);padding:3px 6px;margin-bottom:7px;color:var(--muted)}.article-state.public{color:var(--ok)}.article-title{font-size:16px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}.article-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:10px;color:var(--muted)}.article-actions{display:flex;align-items:center;border-left:1px solid var(--line)}.article-actions a{padding:0 14px;font-size:10px;color:var(--muted);height:100%;display:flex;align-items:center}.article-actions a:hover{background:#f1f1ec;color:#111}.login h1{font-size:42px;margin:8px 0 24px}.field{margin-bottom:16px}.field label{display:block;font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:7px}.field input{width:100%;border:1px solid var(--line);padding:13px 14px;background:#fff;outline:none}@media(max-width:680px){.shell{padding-top:20px}.top{align-items:flex-start}.top-links .site{display:none}.article-row{grid-template-columns:1fr}.article-date{padding:14px 14px 0}.article-main{padding:10px 14px 15px}.article-actions{border-left:0;border-top:1px solid var(--line)}.article-actions a{padding:11px 14px;height:auto}.hero{padding-top:30px}}
   </style>
 </head>
 <body>
   <div class="shell">
-    <div class="top"><div><div class="brand">NOMAD FIELD</div><div class="sub">Private publishing studio</div></div><a href="/" style="font-size:12px;color:#777;text-decoration:none">SITE ↗</a></div>
+    <div class="top">
+      <div><div class="brand">NOMAD FIELD</div><div class="sub">Private publishing studio</div></div>
+      <div class="top-links"><a class="btn secondary site" href="/" target="_blank">SITE ↗</a><a class="btn" href="/studio/editor/">新規記事</a></div>
+    </div>
 
-    <section id="loginPanel" class="panel hidden">
+    <section id="loginPanel" class="panel login hidden">
       <div class="sub">Private</div><h1>STUDIO</h1>
       <div class="field"><label>STUDIO PASSWORD</label><input id="password" type="password" autocomplete="current-password" /></div>
-      <div class="actions"><button id="loginBtn" class="btn">LOGIN</button></div><div id="loginStatus" class="status"></div>
+      <button id="loginBtn" class="btn">LOGIN</button>
+      <div id="loginStatus" class="status"></div>
     </section>
 
-    <main id="editor" class="hidden">
-      <section class="panel">
-        <div class="sub">System</div><h1>WRITE.<br>DROP.<br>PUBLISH.</h1>
-        <div class="hint">Claudeで作った文章を貼り、写真や動画をここへ落とします。GitHubやBunnyの管理画面を普段開く必要はありません。</div>
-        <div id="services" class="service-grid"></div>
+    <main id="articlesPanel" class="hidden">
+      <section class="hero">
+        <div class="eyebrow">Article archive</div>
+        <h1>ARTICLES.</h1>
+        <p>公開済み・下書きの記事を一覧で管理します。タイトルを押すと編集画面へ移動します。</p>
       </section>
-
       <section class="panel">
-        <h2>EDIT EXISTING NOTE</h2>
-        <div class="hint">過去の記事を一覧から選ぶと、本文・タグ・カバー画像まで読み込んで編集できます。既存記事のURLは誤変更を防ぐため固定します。</div>
-        <div class="article-picker">
-          <div class="field" style="margin:14px 0 0"><label>ARTICLE</label><select id="articleSelect"><option value="">新しい記事を書く</option></select></div>
-          <div class="actions"><button id="newArticleBtn" class="btn secondary">新規記事</button><button id="refreshArticlesBtn" class="btn secondary">一覧更新</button></div>
-        </div>
-        <div id="articleMode" class="article-mode"><strong>NEW</strong> 新規記事モード</div>
-        <div id="articleListStatus" class="status"></div>
-        <div id="articleHistory" class="article-history" aria-label="過去の記事一覧"></div>
-      </section>
-
-      <section class="panel">
-        <h2>CLAUDE DRAFT</h2>
-        <div class="hint">Claudeの完成原稿をそのまま貼れます。「タイトル:」「概要:」「タグ:」「本文:」の形式なら自動で各欄へ分けます。</div>
-        <div class="field"><textarea id="claudeRaw" placeholder="タイトル: ...&#10;概要: ...&#10;タグ: AI, Video&#10;本文:&#10;..."></textarea></div>
-        <div class="actions"><button id="parseBtn" class="btn secondary">原稿を取り込む</button><button id="clearRawBtn" class="btn secondary">貼り付け欄をクリア</button></div>
-      </section>
-
-      <section class="panel">
-        <h2>ARTICLE</h2>
-        <div class="field"><label>TITLE</label><input id="title" /></div>
-        <div class="field"><label>DESCRIPTION</label><textarea id="description" style="min-height:92px"></textarea></div>
-        <div class="grid">
-          <div class="field"><label>SLUG（英数字）</label><input id="slug" placeholder="field-note-20260906" /></div>
-          <div class="field"><label>TAGS（カンマ区切り）</label><input id="tags" placeholder="AI, Video, Field Note" /></div>
-        </div>
-        <div class="field"><label>BODY / MARKDOWN</label><textarea id="body" class="body"></textarea></div>
-      </section>
-
-      <section class="panel">
-        <h2>PHOTOS & VIDEO</h2>
-        <div id="dropzone" class="drop">
-          <strong>写真・動画をここにドロップ</strong>
-          <span class="hint">写真は公開前に2.39:1へスマートクロップしてWebP化。動画はBunny Streamへ直接アップロードします。</span>
-          <div class="crop-note">顔検出が利用できる場合は人物を優先し、その他は輪郭・コントラストから主題位置を推定します。Bunnyへ送る写真自体が2.39:1になります。</div>
-          <input id="fileInput" type="file" accept="image/*,video/*" multiple hidden />
-        </div>
-        <div id="mediaList" class="media-list"></div>
-      </section>
-
-      <section class="panel">
-        <h2>COVER IMAGE</h2>
-        <div class="cover"><img id="coverPreview" alt="" /><div><div class="field"><label>IMAGE URL</label><input id="coverImage" /></div><div class="field"><label>ALT</label><input id="coverAlt" /></div><div class="field"><label>CAPTION</label><input id="coverCaption" /></div></div></div>
-      </section>
-
-      <section class="panel">
-        <h2>PUBLISH</h2>
-        <div class="code-note">「下書き保存」はWebに表示しません。既存の公開記事を下書き保存すると非公開になります。「公開」はGitHubへの保存後、Vercelの反映まで少し待ちます。</div>
-        <div class="actions"><button id="draftBtn" class="btn secondary">下書き保存</button><button id="publishBtn" class="btn">公開 / 更新</button><button id="logoutBtn" class="btn danger">ログアウト</button></div>
-        <div id="publishStatus" class="status"></div>
+        <div style="display:flex;justify-content:space-between;gap:14px;align-items:center"><div class="sub">ALL NOTES</div><button id="refreshBtn" class="btn secondary">一覧更新</button></div>
+        <div id="articleList" class="article-list"></div>
+        <div id="listStatus" class="status"></div>
       </section>
     </main>
   </div>
 
-<script type="module" is:inline>
-  import * as tus from 'https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/+esm';
+  <script type="module" is:inline>
+    const $=(id)=>document.getElementById(id);
+    const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  const $ = (id) => document.getElementById(id);
-  const loginPanel = $('loginPanel');
-  const editor = $('editor');
-  const servicesEl = $('services');
-  const mediaList = $('mediaList');
-  const bodyEl = $('body');
-  const articleHistory = $('articleHistory');
-  let serviceState = {};
-  let loadedArticleSlug = '';
-  let loadedArticlePubDate = '';
-  let loadedArticleDraft = true;
-
-  function fallbackSlug() {
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2,'0');
-    return `field-note-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
-  }
-
-  function slugify(value) {
-    const slug = String(value || '').normalize('NFKD').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,100);
-    return slug || fallbackSlug();
-  }
-
-  function setArticleMode(article = null) {
-    if (article) {
-      $('articleMode').innerHTML = `<strong>EDIT</strong> ${article.draft ? '下書き' : '公開済み'} · ${article.pubDate || ''} · /notes/${article.slug}/`;
-      $('slug').disabled = true;
-    } else {
-      $('articleMode').innerHTML = '<strong>NEW</strong> 新規記事モード';
-      $('slug').disabled = false;
+    async function checkSession(){
+      const res=await fetch('/api/studio/session',{cache:'no-store'});
+      const data=await res.json();
+      if(!data.configured){$('loginPanel').classList.remove('hidden');$('loginStatus').textContent='Studioの初期設定がまだ完了していません。';return;}
+      if(data.authenticated){$('articlesPanel').classList.remove('hidden');loadArticles();}
+      else $('loginPanel').classList.remove('hidden');
     }
-  }
 
-  function markHistorySelection(slug = '') {
-    articleHistory?.querySelectorAll('.history-item').forEach((row) => row.classList.toggle('active', row.dataset.slug === slug));
-  }
-
-  function renderArticleHistory(articles = []) {
-    if (!articleHistory) return;
-    articleHistory.innerHTML = '';
-    if (!articles.length) {
-      const empty = document.createElement('div');
-      empty.className = 'history-empty';
-      empty.textContent = 'まだ記事はありません。';
-      articleHistory.appendChild(empty);
-      return;
+    async function loadArticles(){
+      const status=$('listStatus');status.textContent='記事一覧を読み込み中…';
+      try{
+        const res=await fetch('/api/studio/articles',{cache:'no-store'});
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok)throw new Error(data.error||'記事一覧を取得できませんでした。');
+        const articles=data.articles||[];
+        $('articleList').innerHTML=articles.map(a=>{
+          const state=a.draft?'下書き':'公開';
+          const tags=(a.tags||[]).slice(0,4).map(tag=>`<span>${esc(tag)}</span>`).join('');
+          const editUrl=`/studio/editor/?slug=${encodeURIComponent(a.slug)}`;
+          const view=a.draft?'':`<a href="/notes/${encodeURIComponent(a.slug)}/" target="_blank">表示 ↗</a>`;
+          return `<article class="article-row"><div class="article-date">${esc(a.pubDate||'')}</div><a class="article-main" href="${editUrl}"><span class="article-state ${a.draft?'':'public'}">${state}</span><div class="article-title">${esc(a.title)}</div><div class="article-meta">${tags}<span>/${esc(a.slug)}/</span></div></a><div class="article-actions"><a href="${editUrl}">編集 →</a>${view}</div></article>`;
+        }).join('')||'<div style="padding:22px 0;color:#777;font-size:12px">記事はまだありません。</div>';
+        status.textContent=`${articles.length}件の記事`;
+      }catch(e){status.textContent=e.message;}
     }
-    for (const article of articles) {
-      const row = document.createElement('div');
-      row.className = 'history-item';
-      row.dataset.slug = article.slug;
 
-      const edit = document.createElement('button');
-      edit.type = 'button';
-      edit.className = 'history-edit';
-      edit.addEventListener('click', () => {
-        $('articleSelect').value = article.slug;
-        loadArticle(article.slug);
-      });
-
-      const top = document.createElement('div');
-      top.className = 'history-top';
-      const state = document.createElement('span');
-      state.className = `history-state ${article.draft ? '' : 'public'}`;
-      state.textContent = article.draft ? '下書き' : '公開';
-      const date = document.createElement('span');
-      date.className = 'history-date';
-      date.textContent = article.pubDate || '';
-      top.append(state, date);
-
-      const title = document.createElement('span');
-      title.className = 'history-title';
-      title.textContent = article.title || article.slug;
-      edit.append(top, title);
-
-      if ((article.tags || []).length) {
-        const meta = document.createElement('div');
-        meta.className = 'history-meta';
-        for (const tag of article.tags.slice(0, 5)) {
-          const span = document.createElement('span');
-          span.textContent = tag;
-          meta.appendChild(span);
-        }
-        edit.appendChild(meta);
-      }
-      row.appendChild(edit);
-
-      if (!article.draft) {
-        const open = document.createElement('a');
-        open.className = 'history-open';
-        open.href = `/notes/${encodeURIComponent(article.slug)}/`;
-        open.target = '_blank';
-        open.rel = 'noopener noreferrer';
-        open.textContent = '表示 ↗';
-        row.appendChild(open);
-      }
-      articleHistory.appendChild(row);
-    }
-    markHistorySelection(loadedArticleSlug);
-  }
-
-  async function checkSession() {
-    const res = await fetch('/api/studio/session', { cache:'no-store' });
-    const data = await res.json();
-    serviceState = data.services || {};
-    if (!data.configured) {
-      loginPanel.classList.remove('hidden');
-      $('loginStatus').textContent = 'Studioの初期設定がまだ完了していません。Vercel Environment Variablesを設定してください。';
-      return;
-    }
-    if (data.authenticated) showEditor(); else loginPanel.classList.remove('hidden');
-  }
-
-  function showEditor() {
-    loginPanel.classList.add('hidden');
-    editor.classList.remove('hidden');
-    renderServices();
-    if (serviceState.github) loadArticleList();
-  }
-
-  function renderServices() {
-    const items = [
-      ['GitHub / Article', serviceState.github],
-      ['Bunny Storage / Photo', serviceState.bunnyStorage],
-      ['Bunny Stream / Video', serviceState.bunnyStream]
-    ];
-    servicesEl.innerHTML = items.map(([name,ok]) => `<div class="service ${ok?'ok':'warn'}">${ok?'●':'○'} ${name}<br>${ok?'READY':'SETUP REQUIRED'}</div>`).join('');
-  }
-
-  async function loadArticleList(selectSlug = loadedArticleSlug) {
-    const status = $('articleListStatus');
-    status.textContent = '記事一覧を読み込み中…';
-    try {
-      const res = await fetch('/api/studio/articles', { cache:'no-store' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(data.error || '記事一覧を取得できませんでした。');
-      const articles = data.articles || [];
-      const select = $('articleSelect');
-      select.innerHTML = '<option value="">新しい記事を書く</option>';
-      for (const article of articles) {
-        const option = document.createElement('option');
-        option.value = article.slug;
-        option.textContent = `${article.draft ? '[下書き]' : '[公開]'} ${article.pubDate || ''}  ${article.title}`;
-        select.appendChild(option);
-      }
-      if (selectSlug) select.value = selectSlug;
-      renderArticleHistory(articles);
-      status.textContent = `${articles.length}件の記事を読み込みました。`;
-    } catch (e) {
-      status.textContent = e.message;
-      renderArticleHistory([]);
-    }
-  }
-
-  async function loadArticle(slug) {
-    if (!slug) { resetArticle(); return; }
-    const status = $('articleListStatus');
-    status.textContent = '記事を読み込み中…';
-    try {
-      const res = await fetch(`/api/studio/articles?slug=${encodeURIComponent(slug)}`, { cache:'no-store' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(data.error || '記事を読み込めませんでした。');
-      const a = data.article;
-      loadedArticleSlug = a.slug;
-      loadedArticlePubDate = a.pubDate || '';
-      loadedArticleDraft = Boolean(a.draft);
-      $('title').value = a.title || '';
-      $('description').value = a.description || '';
-      $('slug').value = a.slug || '';
-      $('tags').value = (a.tags || []).join(', ');
-      bodyEl.value = a.body || '';
-      $('coverImage').value = a.image || '';
-      $('coverAlt').value = a.imageAlt || '';
-      $('coverCaption').value = a.imageCaption || '';
-      $('coverPreview').src = a.image || '';
-      $('claudeRaw').value = '';
-      mediaList.innerHTML = '';
-      if (a.image) addMediaCard({type:'image',name:'Current cover image',url:a.image,markdown:`![${a.imageAlt || a.title}](${a.image})`,meta:'既存画像'});
-      setArticleMode(a);
-      markHistorySelection(a.slug);
-      status.textContent = `「${a.title}」を編集中です。`;
-      $('publishStatus').textContent = '';
-      window.scrollTo({top:0,behavior:'smooth'});
-    } catch (e) {
-      status.textContent = e.message;
-    }
-  }
-
-  function resetArticle() {
-    loadedArticleSlug = '';
-    loadedArticlePubDate = '';
-    loadedArticleDraft = true;
-    $('articleSelect').value = '';
-    $('title').value = '';
-    $('description').value = '';
-    $('slug').value = '';
-    $('tags').value = '';
-    bodyEl.value = '';
-    $('coverImage').value = '';
-    $('coverAlt').value = '';
-    $('coverCaption').value = '';
-    $('coverPreview').removeAttribute('src');
-    $('claudeRaw').value = '';
-    mediaList.innerHTML = '';
-    $('publishStatus').textContent = '';
-    setArticleMode();
-    markHistorySelection('');
-  }
-
-  $('articleSelect').addEventListener('change', e => loadArticle(e.target.value));
-  $('newArticleBtn').addEventListener('click', resetArticle);
-  $('refreshArticlesBtn').addEventListener('click', () => loadArticleList());
-
-  $('loginBtn').addEventListener('click', async () => {
-    $('loginStatus').textContent = '確認中…';
-    const res = await fetch('/api/studio/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok) { $('loginStatus').textContent = data.error || 'ログインできませんでした。'; return; }
-    const session = await fetch('/api/studio/session',{cache:'no-store'}).then(r=>r.json());
-    serviceState = session.services || {}; showEditor();
-  });
-
-  $('logoutBtn').addEventListener('click', async () => { await fetch('/api/studio/logout',{method:'POST'}); location.reload(); });
-
-  $('parseBtn').addEventListener('click', () => {
-    const raw = $('claudeRaw').value.trim();
-    if (!raw) return;
-    const get = (labels, untilLabels=[]) => {
-      const escaped = labels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
-      const until = untilLabels.length ? `(?=\n(?:${untilLabels.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})\s*[:：]|$)` : '$';
-      const m = raw.match(new RegExp(`(?:^|\n)(?:${escaped})\s*[:：]\s*([\s\S]*?)${until}`,'i'));
-      return m ? m[1].trim() : '';
+    $('refreshBtn').onclick=loadArticles;
+    $('loginBtn').onclick=async()=>{
+      $('loginStatus').textContent='確認中…';
+      const res=await fetch('/api/studio/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok){$('loginStatus').textContent=data.error||'ログインできませんでした。';return;}
+      $('loginPanel').classList.add('hidden');$('articlesPanel').classList.remove('hidden');loadArticles();
     };
-    const title = get(['タイトル','Title'],['概要','Description','タグ','Tags','本文','Body']);
-    const description = get(['概要','Description'],['タグ','Tags','本文','Body']);
-    const tags = get(['タグ','Tags'],['本文','Body']);
-    const body = get(['本文','Body']);
-    if (title) $('title').value = title;
-    if (description) $('description').value = description;
-    if (tags) $('tags').value = tags.replace(/[、]/g,',');
-    bodyEl.value = body || raw;
-    if (!loadedArticleSlug && !$('slug').value) $('slug').value = slugify(title);
-  });
-  $('clearRawBtn').addEventListener('click',()=>{$('claudeRaw').value='';});
-  $('title').addEventListener('blur',()=>{ if (!loadedArticleSlug && !$('slug').value) $('slug').value=slugify($('title').value); });
-
-  function insertAtCursor(text) {
-    const start = bodyEl.selectionStart ?? bodyEl.value.length;
-    const end = bodyEl.selectionEnd ?? start;
-    const before = bodyEl.value.slice(0,start);
-    const after = bodyEl.value.slice(end);
-    const prefix = before && !before.endsWith('\n\n') ? (before.endsWith('\n')?'\n':'\n\n') : '';
-    const suffix = after && !after.startsWith('\n') ? '\n\n' : '\n';
-    bodyEl.value = before + prefix + text + suffix + after;
-    bodyEl.focus();
-  }
-
-  function clamp(value,min,max){return Math.max(min,Math.min(max,value));}
-
-  async function detectFocus(bitmap) {
-    if ('FaceDetector' in window) {
-      try {
-        const detector = new FaceDetector({fastMode:true,maxDetectedFaces:8});
-        const faces = await detector.detect(bitmap);
-        if (faces.length) {
-          let sumX=0,sumY=0,sumW=0;
-          for (const face of faces) {
-            const b=face.boundingBox;
-            const weight=Math.max(1,b.width*b.height);
-            sumX+=(b.x+b.width/2)*weight;
-            sumY+=(b.y+b.height/2)*weight;
-            sumW+=weight;
-          }
-          return {x:sumX/sumW/bitmap.width,y:sumY/sumW/bitmap.height,mode:'FACE'};
-        }
-      } catch (_) {}
-    }
-
-    const maxDim=180;
-    const scale=Math.min(1,maxDim/Math.max(bitmap.width,bitmap.height));
-    const w=Math.max(24,Math.round(bitmap.width*scale));
-    const h=Math.max(24,Math.round(bitmap.height*scale));
-    const c=document.createElement('canvas'); c.width=w; c.height=h;
-    const ctx=c.getContext('2d',{willReadFrequently:true}); ctx.drawImage(bitmap,0,0,w,h);
-    const data=ctx.getImageData(0,0,w,h).data;
-    const lum=new Float32Array(w*h);
-    for(let i=0,p=0;i<data.length;i+=4,p++) lum[p]=data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722;
-    let sx=0,sy=0,sw=0;
-    for(let y=1;y<h-1;y++){
-      for(let x=1;x<w-1;x++){
-        const p=y*w+x;
-        const gx=Math.abs(lum[p+1]-lum[p-1]);
-        const gy=Math.abs(lum[p+w]-lum[p-w]);
-        const edge=gx+gy;
-        if(edge<5) continue;
-        const nx=x/(w-1), ny=y/(h-1);
-        const centerBias=.72+.28*(1-Math.min(1,Math.hypot(nx-.5,ny-.5)/.707));
-        const weight=edge*centerBias;
-        sx+=nx*weight; sy+=ny*weight; sw+=weight;
-      }
-    }
-    if(sw>0) return {x:sx/sw,y:sy/sw,mode:'SMART'};
-    return {x:.5,y:.5,mode:'CENTER'};
-  }
-
-  async function prepareCinematicImage(file) {
-    const bitmap=await createImageBitmap(file);
-    const target=2.39;
-    const focus=await detectFocus(bitmap);
-    const sourceRatio=bitmap.width/bitmap.height;
-    let sx=0,sy=0,sw=bitmap.width,sh=bitmap.height;
-    if(sourceRatio>target){
-      sw=bitmap.height*target;
-      sx=clamp(focus.x*bitmap.width-sw/2,0,bitmap.width-sw);
-    }else if(sourceRatio<target){
-      sh=bitmap.width/target;
-      sy=clamp(focus.y*bitmap.height-sh/2,0,bitmap.height-sh);
-    }
-    const outW=Math.max(720,Math.min(2400,Math.round(sw)));
-    const outH=Math.round(outW/target);
-    const canvas=document.createElement('canvas'); canvas.width=outW; canvas.height=outH;
-    canvas.getContext('2d',{alpha:false}).drawImage(bitmap,sx,sy,sw,sh,0,0,outW,outH);
-    bitmap.close?.();
-    const make=q=>new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));
-    let blob=await make(.86);
-    for(const q of [.80,.74,.68,.62]){if(blob.size<=3.4*1024*1024)break;blob=await make(q);}
-    if(!blob) throw new Error('画像変換に失敗しました。');
-    if(blob.size>3.8*1024*1024) throw new Error('公開用画像を十分に圧縮できませんでした。');
-    const base=file.name.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9_-]+/g,'-')||'image';
-    return {blob,name:`${base}-cinema.webp`,mode:focus.mode,width:outW,height:outH};
-  }
-
-  function addMediaCard({type,name,url,markdown,progress=false,meta=''}) {
-    const item=document.createElement('div'); item.className='media-item';
-    const visual=type==='image'?`<img class="thumb" src="${url}" alt="">`:`<div class="thumb" style="display:grid;place-items:center;font-size:10px">VIDEO</div>`;
-    item.innerHTML=`${visual}<div><div class="media-name">${name}</div><div class="media-meta">${meta?`${meta} · `:''}${url||'uploading…'}</div>${progress?'<div class="progress"><span></span></div>':''}</div><div></div>`;
-    mediaList.prepend(item);
-    if(markdown)attachMediaButtons(item,{type,url,markdown});
-    return item;
-  }
-
-  function attachMediaButtons(item,{type,url,markdown}) {
-    const box=item.lastElementChild; box.innerHTML='';
-    const insert=document.createElement('button');insert.className='mini';insert.textContent='本文に挿入';insert.onclick=()=>insertAtCursor(markdown);box.appendChild(insert);
-    if(type==='image'){
-      const cover=document.createElement('button');cover.className='mini';cover.textContent='カバーに設定';cover.onclick=()=>{$('coverImage').value=url;$('coverPreview').src=url;if(!$('coverAlt').value)$('coverAlt').value=$('title').value;};box.appendChild(cover);
-    }
-  }
-
-  async function uploadImage(file) {
-    if(!serviceState.bunnyStorage) throw new Error('Bunny Storageの設定がまだです。');
-    const prepared=await prepareCinematicImage(file);
-    const slug=$('slug').value||fallbackSlug();
-    if(!$('slug').value&&!loadedArticleSlug)$('slug').value=slug;
-    const res=await fetch(`/api/studio/image-upload?slug=${encodeURIComponent(slug)}&name=${encodeURIComponent(prepared.name)}`,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:prepared.blob});
-    const data=await res.json().catch(()=>({}));
-    if(!res.ok) throw new Error(data.error||'画像アップロードに失敗しました。');
-    const alt=$('title').value||'NOMAD FIELD image';
-    const markdown=`![${alt}](${data.url})`;
-    addMediaCard({type:'image',name:file.name,url:data.url,markdown,meta:`2.39:1 · ${prepared.mode} · ${prepared.width}×${prepared.height}`});
-    if(!$('coverImage').value){$('coverImage').value=data.url;$('coverPreview').src=data.url;$('coverAlt').value=alt;}
-  }
-
-  async function uploadVideo(file) {
-    if (!serviceState.bunnyStream) throw new Error('Bunny Streamの設定がまだです。');
-    const sigRes=await fetch('/api/studio/video-signature',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:file.name})});
-    const sig=await sigRes.json().catch(()=>({}));
-    if(!sigRes.ok) throw new Error(sig.error||'動画アップロードを開始できませんでした。');
-    const item=addMediaCard({type:'video',name:file.name,url:'Bunny Stream',progress:true});
-    const bar=item.querySelector('.progress span'); const meta=item.querySelector('.media-meta');
-    await new Promise((resolve,reject)=>{
-      const upload=new tus.Upload(file,{
-        endpoint:sig.endpoint,
-        retryDelays:[0,1000,3000,5000,10000],
-        chunkSize:25*1024*1024,
-        headers:{AuthorizationSignature:sig.signature,AuthorizationExpire:String(sig.expiresAt),VideoId:sig.videoId,LibraryId:String(sig.libraryId)},
-        metadata:{filename:file.name,filetype:file.type,title:file.name},
-        onError:reject,
-        onProgress:(sent,total)=>{const pct=Math.round(sent/total*100);bar.style.width=`${pct}%`;meta.textContent=`アップロード ${pct}%`;},
-        onSuccess:()=>resolve()
-      });
-      upload.findPreviousUploads().then(prev=>{if(prev.length)upload.resumeFromPreviousUpload(prev[0]);upload.start();});
-    });
-    meta.textContent=`アップロード完了 / エンコード中 · ${sig.videoId}`;bar.style.width='100%';attachMediaButtons(item,{type:'video',url:sig.embedUrl,markdown:sig.markdown});
-  }
-
-  async function processFiles(files) {
-    for(const file of files){
-      try{if(file.type.startsWith('image/'))await uploadImage(file);else if(file.type.startsWith('video/'))await uploadVideo(file);}
-      catch(e){const item=addMediaCard({type:file.type.startsWith('video/')?'video':'image',name:file.name,url:'ERROR'});item.querySelector('.media-meta').textContent=e.message;}
-    }
-  }
-
-  const drop=$('dropzone'),input=$('fileInput');drop.onclick=()=>input.click();input.onchange=()=>processFiles([...input.files]);
-  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
-  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
-  drop.addEventListener('drop',e=>processFiles([...e.dataTransfer.files]));
-  $('coverImage').addEventListener('input',()=>{$('coverPreview').src=$('coverImage').value;});
-
-  async function save(draft) {
-    const status=$('publishStatus');
-    status.textContent=draft?(loadedArticleSlug?'記事を下書きとして更新中…':'下書きを保存中…'):(loadedArticleSlug?'公開記事を更新中…':'公開用コミットを作成中…');
-    const payload={title:$('title').value.trim(),description:$('description').value.trim(),slug:$('slug').value.trim()||fallbackSlug(),originalSlug:loadedArticleSlug,pubDate:loadedArticlePubDate,tags:$('tags').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean),body:bodyEl.value.trim(),image:$('coverImage').value.trim(),imageAlt:$('coverAlt').value.trim(),imageCaption:$('coverCaption').value.trim(),draft};
-    const res=await fetch('/api/studio/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const data=await res.json().catch(()=>({}));
-    if(!res.ok){status.textContent=data.error||'保存に失敗しました。';return;}
-    $('slug').value=data.slug;
-    loadedArticleSlug=data.slug;
-    if(!loadedArticlePubDate)loadedArticlePubDate=new Date().toISOString().slice(0,10);
-    loadedArticleDraft=draft;
-    $('slug').disabled=true;
-    setArticleMode({slug:data.slug,title:$('title').value,draft,pubDate:loadedArticlePubDate});
-    status.innerHTML=draft?`下書きを保存しました。<br>GitHub: ${data.filePath}`:`保存しました。Vercel反映後: <a href="${data.url}" target="_blank">${data.url}</a>`;
-    await loadArticleList(data.slug);
-  }
-  $('draftBtn').onclick=()=>save(true);$('publishBtn').onclick=()=>save(false);
-
-  setArticleMode();
-  checkSession().catch(e=>{loginPanel.classList.remove('hidden');$('loginStatus').textContent=e.message;});
-</script>
+    checkSession().catch(e=>{$('loginPanel').classList.remove('hidden');$('loginStatus').textContent=e.message;});
+  </script>
 </body>
 </html>

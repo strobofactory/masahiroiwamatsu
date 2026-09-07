@@ -18,11 +18,11 @@
     .field{margin:0 0 18px}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fff;padding:13px 14px;outline:none;border-radius:0}.field input:disabled{background:#f3f3ef;color:#888}.field textarea{min-height:150px;resize:vertical;line-height:1.75}.field textarea.body{min-height:520px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.btn.danger{background:transparent;color:#777;border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
     .status{font-size:12px;line-height:1.7;margin-top:12px;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.service{border:1px solid var(--line);padding:10px;font-size:11px}.service.ok{color:var(--ok)}.service.warn{color:var(--warn)}
-    .article-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.article-mode{font-size:11px;color:var(--muted);margin-top:9px}.article-mode strong{color:var(--ink);font-weight:600}
+    .article-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.article-mode{font-size:11px;color:var(--muted);margin-top:9px}.article-mode strong{color:var(--ink);font-weight:600}.article-history{display:grid;gap:0;margin-top:18px;border-top:1px solid var(--line)}.history-item{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;border-bottom:1px solid var(--line);background:#fff}.history-item.active{background:#f3f3ee}.history-edit{appearance:none;border:0;background:transparent;text-align:left;padding:15px 14px;cursor:pointer;min-width:0}.history-edit:hover{background:#f8f8f4}.history-top{display:flex;gap:10px;align-items:center;margin-bottom:6px}.history-state{font-size:9px;letter-spacing:.12em;border:1px solid var(--line);padding:3px 6px;color:var(--muted);white-space:nowrap}.history-state.public{color:var(--ok)}.history-date{font-size:10px;color:var(--muted)}.history-title{display:block;font-size:14px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}.history-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:var(--muted)}.history-open{display:flex;align-items:center;justify-content:center;min-width:62px;padding:12px;border-left:1px solid var(--line);font-size:10px;color:var(--muted);text-decoration:none}.history-open:hover{background:#f8f8f4;color:var(--ink)}.history-empty{padding:18px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
     .drop{border:1px dashed #aaa;padding:34px 20px;text-align:center;cursor:pointer;background:#fafaf7}.drop.drag{background:#f0f0ea}.drop strong{display:block;margin-bottom:6px}.crop-note{margin-top:8px;font-size:10px;line-height:1.6;color:var(--muted)}
     .media-list{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:112px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);padding:10px;overflow:hidden}.thumb{display:block;width:112px!important;height:47px!important;max-width:112px!important;max-height:47px!important;object-fit:cover!important;background:#eee;overflow:hidden}.media-name{font-size:12px;overflow-wrap:anywhere}.media-meta{font-size:10px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.mini{border:1px solid var(--line);background:#fff;padding:7px 9px;font-size:10px;cursor:pointer;margin-left:4px}.progress{height:3px;background:#e6e6df;margin-top:8px}.progress>span{display:block;height:100%;background:#222;width:0}
     .cover{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}.cover img{width:220px;aspect-ratio:2.39/1;object-fit:cover;background:#eee;border:1px solid var(--line)}.code-note{font-size:11px;color:var(--muted);padding:12px;border-left:1px solid #111;margin:14px 0}
-    @media(max-width:760px){.grid,.service-grid,.cover,.article-picker{grid-template-columns:1fr}.media-item{grid-template-columns:96px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:96px!important;height:40px!important;max-width:96px!important;max-height:40px!important}.top{align-items:flex-start}.shell{padding-top:22px}.cover img{width:100%;max-width:260px}}
+    @media(max-width:760px){.grid,.service-grid,.cover,.article-picker{grid-template-columns:1fr}.media-item{grid-template-columns:96px minmax(0,1fr)}.media-item>div:last-child{grid-column:1/-1}.thumb{width:96px!important;height:40px!important;max-width:96px!important;max-height:40px!important}.top{align-items:flex-start}.shell{padding-top:22px}.cover img{width:100%;max-width:260px}.history-edit{padding:13px 10px}.history-open{min-width:52px;padding:10px}.history-title{font-size:13px}}
   </style>
 </head>
 <body>
@@ -44,13 +44,14 @@
 
       <section class="panel">
         <h2>EDIT EXISTING NOTE</h2>
-        <div class="hint">過去の記事を選ぶと、本文・タグ・カバー画像まで読み込んで編集できます。既存記事のURLは誤変更を防ぐため固定します。</div>
+        <div class="hint">過去の記事を一覧から選ぶと、本文・タグ・カバー画像まで読み込んで編集できます。既存記事のURLは誤変更を防ぐため固定します。</div>
         <div class="article-picker">
           <div class="field" style="margin:14px 0 0"><label>ARTICLE</label><select id="articleSelect"><option value="">新しい記事を書く</option></select></div>
           <div class="actions"><button id="newArticleBtn" class="btn secondary">新規記事</button><button id="refreshArticlesBtn" class="btn secondary">一覧更新</button></div>
         </div>
         <div id="articleMode" class="article-mode"><strong>NEW</strong> 新規記事モード</div>
         <div id="articleListStatus" class="status"></div>
+        <div id="articleHistory" class="article-history" aria-label="過去の記事一覧"></div>
       </section>
 
       <section class="panel">
@@ -105,6 +106,7 @@
   const servicesEl = $('services');
   const mediaList = $('mediaList');
   const bodyEl = $('body');
+  const articleHistory = $('articleHistory');
   let serviceState = {};
   let loadedArticleSlug = '';
   let loadedArticlePubDate = '';
@@ -129,6 +131,74 @@
       $('articleMode').innerHTML = '<strong>NEW</strong> 新規記事モード';
       $('slug').disabled = false;
     }
+  }
+
+  function markHistorySelection(slug = '') {
+    articleHistory?.querySelectorAll('.history-item').forEach((row) => row.classList.toggle('active', row.dataset.slug === slug));
+  }
+
+  function renderArticleHistory(articles = []) {
+    if (!articleHistory) return;
+    articleHistory.innerHTML = '';
+    if (!articles.length) {
+      const empty = document.createElement('div');
+      empty.className = 'history-empty';
+      empty.textContent = 'まだ記事はありません。';
+      articleHistory.appendChild(empty);
+      return;
+    }
+    for (const article of articles) {
+      const row = document.createElement('div');
+      row.className = 'history-item';
+      row.dataset.slug = article.slug;
+
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.className = 'history-edit';
+      edit.addEventListener('click', () => {
+        $('articleSelect').value = article.slug;
+        loadArticle(article.slug);
+      });
+
+      const top = document.createElement('div');
+      top.className = 'history-top';
+      const state = document.createElement('span');
+      state.className = `history-state ${article.draft ? '' : 'public'}`;
+      state.textContent = article.draft ? '下書き' : '公開';
+      const date = document.createElement('span');
+      date.className = 'history-date';
+      date.textContent = article.pubDate || '';
+      top.append(state, date);
+
+      const title = document.createElement('span');
+      title.className = 'history-title';
+      title.textContent = article.title || article.slug;
+      edit.append(top, title);
+
+      if ((article.tags || []).length) {
+        const meta = document.createElement('div');
+        meta.className = 'history-meta';
+        for (const tag of article.tags.slice(0, 5)) {
+          const span = document.createElement('span');
+          span.textContent = tag;
+          meta.appendChild(span);
+        }
+        edit.appendChild(meta);
+      }
+      row.appendChild(edit);
+
+      if (!article.draft) {
+        const open = document.createElement('a');
+        open.className = 'history-open';
+        open.href = `/notes/${encodeURIComponent(article.slug)}/`;
+        open.target = '_blank';
+        open.rel = 'noopener noreferrer';
+        open.textContent = '表示 ↗';
+        row.appendChild(open);
+      }
+      articleHistory.appendChild(row);
+    }
+    markHistorySelection(loadedArticleSlug);
   }
 
   async function checkSession() {
@@ -166,18 +236,21 @@
       const res = await fetch('/api/studio/articles', { cache:'no-store' });
       const data = await res.json().catch(()=>({}));
       if (!res.ok) throw new Error(data.error || '記事一覧を取得できませんでした。');
+      const articles = data.articles || [];
       const select = $('articleSelect');
       select.innerHTML = '<option value="">新しい記事を書く</option>';
-      for (const article of data.articles || []) {
+      for (const article of articles) {
         const option = document.createElement('option');
         option.value = article.slug;
         option.textContent = `${article.draft ? '[下書き]' : '[公開]'} ${article.pubDate || ''}  ${article.title}`;
         select.appendChild(option);
       }
       if (selectSlug) select.value = selectSlug;
-      status.textContent = `${(data.articles || []).length}件の記事を読み込みました。`;
+      renderArticleHistory(articles);
+      status.textContent = `${articles.length}件の記事を読み込みました。`;
     } catch (e) {
       status.textContent = e.message;
+      renderArticleHistory([]);
     }
   }
 
@@ -206,6 +279,7 @@
       mediaList.innerHTML = '';
       if (a.image) addMediaCard({type:'image',name:'Current cover image',url:a.image,markdown:`![${a.imageAlt || a.title}](${a.image})`,meta:'既存画像'});
       setArticleMode(a);
+      markHistorySelection(a.slug);
       status.textContent = `「${a.title}」を編集中です。`;
       $('publishStatus').textContent = '';
       window.scrollTo({top:0,behavior:'smooth'});
@@ -232,6 +306,7 @@
     mediaList.innerHTML = '';
     $('publishStatus').textContent = '';
     setArticleMode();
+    markHistorySelection('');
   }
 
   $('articleSelect').addEventListener('change', e => loadArticle(e.target.value));

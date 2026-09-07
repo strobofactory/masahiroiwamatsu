@@ -7,7 +7,6 @@ draft: false
 image: "https://nomad-field-media.b-cdn.net/notes/field-note-20260906-2155/1788699303392-IMG_7730.webp"
 imageAlt: "NOMAD FIELD image"
 lang: "en"
-slug: "aaa"
 translationKey: "aaa"
 ---
 

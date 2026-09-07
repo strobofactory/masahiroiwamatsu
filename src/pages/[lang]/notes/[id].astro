@@ -5,12 +5,12 @@ import { localeInfo, locales, localizedPath, publicLocales, type Locale } from '
 
 export async function getStaticPaths(){
   const notes = await getCollection('notes', ({data})=>!data.draft && publicLocales.includes(data.lang as any));
-  return notes.map(note=>({params:{lang:note.data.lang,id:note.data.slug ?? note.id},props:{note,lang:note.data.lang}}));
+  return notes.map(note=>({params:{lang:note.data.lang,id:note.data.translationKey ?? note.data.slug ?? note.id},props:{note,lang:note.data.lang}}));
 }
 
 const { note, lang } = Astro.props as { note: any; lang: Locale };
 const { Content } = await render(note);
-const slug = note.data.slug ?? note.id;
+const slug = note.data.translationKey ?? note.data.slug ?? note.id;
 const translationKey = note.data.translationKey ?? slug;
 const allNotes = await getCollection('notes', ({data})=>!data.draft);
 const availableLocales = locales.filter(code => allNotes.some(candidate => candidate.data.lang === code && (candidate.data.translationKey ?? candidate.data.slug ?? candidate.id) === translationKey));

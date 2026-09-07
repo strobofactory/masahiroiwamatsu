@@ -8,7 +8,6 @@ draft: false
 image: "https://nomad-field-media.b-cdn.net/notes/why-nomad-field/1788700213218-Barcelona_00003.webp"
 imageAlt: "Why I’m writing on a domain under my own name now"
 lang: "en"
-slug: "why-nomad-field"
 translationKey: "why-nomad-field"
 ---
 

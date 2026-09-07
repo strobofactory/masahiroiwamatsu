@@ -1,3 +1,4 @@
+// Japanese remains the root locale. English, Spanish, Simplified Chinese, and Korean use locale-prefixed URLs.
 export const locales = ['ja', 'en', 'es', 'zh', 'ko'] as const;
 export type Locale = (typeof locales)[number];
 

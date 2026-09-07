@@ -9,35 +9,140 @@
   <meta name="theme-color" content="#f7f7f3" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <title>NOMAD FIELD Studio — Articles</title>
-  <style>
-    :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--ok:#245c34}
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif}button,input{font:inherit}a{color:inherit;text-decoration:none}.shell{width:min(1040px,calc(100% - 28px));margin:0 auto;padding:34px 0 80px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:22px;border-bottom:1px solid var(--line)}.brand{font-size:15px;font-weight:700;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}.top-links{display:flex;gap:10px;align-items:center}.btn{border:1px solid #111;background:#111;color:#fff;padding:11px 15px;cursor:pointer;font-size:12px}.btn.secondary{background:transparent;color:#111;border-color:var(--line)}.panel{background:var(--paper);border:1px solid var(--line);padding:24px;margin-top:22px}.hidden{display:none!important}.hero{padding:42px 0 18px}.eyebrow{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}.hero h1{font-size:clamp(42px,8vw,80px);line-height:.95;letter-spacing:-.045em;margin:14px 0 18px}.hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.8}.status{font-size:12px;color:var(--muted);line-height:1.7;margin-top:12px}.article-list{display:grid;border-top:1px solid var(--line);margin-top:18px}.article-row{display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:stretch;border-bottom:1px solid var(--line);background:#fff}.article-row:hover{background:#f8f8f4}.article-main{padding:17px 18px;min-width:0}.article-date{padding:18px 0 18px 14px;font-size:10px;color:var(--muted);white-space:nowrap}.article-state{display:inline-block;font-size:9px;letter-spacing:.1em;border:1px solid var(--line);padding:3px 6px;margin-bottom:7px;color:var(--muted)}.article-state.public{color:var(--ok)}.article-title{font-size:16px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}.article-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:10px;color:var(--muted)}.article-actions{display:flex;align-items:center;border-left:1px solid var(--line)}.article-actions a{padding:0 14px;font-size:10px;color:var(--muted);height:100%;display:flex;align-items:center}.article-actions a:hover{background:#f1f1ec;color:#111}.login h1{font-size:42px;margin:8px 0 24px}.field{margin-bottom:16px}.field label{display:block;font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:7px}.field input{width:100%;border:1px solid var(--line);padding:13px 14px;background:#fff;outline:none}@media(max-width:680px){.shell{padding-top:20px}.top{align-items:flex-start}.top-links .site{display:none}.article-row{grid-template-columns:1fr}.article-date{padding:14px 14px 0}.article-main{padding:10px 14px 15px}.article-actions{border-left:0;border-top:1px solid var(--line)}.article-actions a{padding:11px 14px;height:auto}.hero{padding-top:30px}}
+  <style is:global>
+    :root{
+      --bg:#f7f7f3;
+      --ink:#111;
+      --muted:#787873;
+      --line:#d8d8d1;
+      --soft:#efefe9;
+      --paper:#fff;
+      --ok:#315d3b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif}
+    body{font-weight:400}
+    button,input{font:inherit}
+    a,a:visited{color:inherit;text-decoration:none}
+    button{border-radius:0}
+
+    .shell{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:34px 0 86px}
+    .top{height:72px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}
+    .brand{font-size:14px;font-weight:750;letter-spacing:.095em;line-height:1.1}
+    .sub{margin-top:4px;font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+    .top-links{display:flex;gap:8px;align-items:center}
+    .btn{appearance:none;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 15px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.02em;line-height:1;transition:background .16s ease,color .16s ease,border-color .16s ease}
+    .btn:hover{background:#333;border-color:#333}
+    .btn.secondary{background:transparent;color:var(--ink);border-color:var(--line)}
+    .btn.secondary:hover{background:var(--paper);border-color:#aaa}
+    .hidden{display:none!important}
+
+    .hero{padding:54px 0 46px}
+    .eyebrow{font-size:10px;color:var(--muted);letter-spacing:.19em;text-transform:uppercase}
+    .hero h1{font-size:clamp(56px,8.6vw,104px);font-weight:800;line-height:.88;letter-spacing:-.055em;margin:20px 0 24px}
+    .hero p{max-width:620px;margin:0;color:#595955;font-size:13px;line-height:1.9}
+
+    .archive{border-top:1px solid var(--ink)}
+    .archive-head{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:22px;border-bottom:1px solid var(--line)}
+    .archive-title{font-size:10px;font-weight:650;letter-spacing:.18em}
+    .archive-tools{display:flex;align-items:center;gap:18px}
+    .filters{display:flex;align-items:center;gap:2px}
+    .filter-btn{appearance:none;border:0;background:transparent;color:var(--muted);padding:8px 10px;cursor:pointer;font-size:10px;letter-spacing:.06em}
+    .filter-btn:hover{color:var(--ink)}
+    .filter-btn.active{background:var(--ink);color:#fff}
+    .refresh-btn{appearance:none;border:0;border-left:1px solid var(--line);background:transparent;padding:8px 0 8px 18px;color:var(--muted);cursor:pointer;font-size:10px;letter-spacing:.06em}
+    .refresh-btn:hover{color:var(--ink)}
+
+    .article-list{display:grid}
+    .article-row{display:grid;grid-template-columns:150px minmax(0,1fr) 180px;min-height:142px;border-bottom:1px solid var(--line);background:transparent;transition:background .15s ease}
+    .article-row:hover{background:rgba(255,255,255,.55)}
+    .article-side{padding:28px 20px 24px 0;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+    .article-date{font-size:11px;color:var(--muted);letter-spacing:.03em;font-variant-numeric:tabular-nums}
+    .article-state{display:inline-flex;align-items:center;justify-content:center;min-width:48px;border:1px solid var(--line);padding:5px 7px;font-size:9px;font-weight:650;letter-spacing:.1em;color:var(--muted);background:rgba(255,255,255,.5)}
+    .article-state.public{color:var(--ok);border-color:#b8c8bb}
+    .article-main{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:25px 28px;border-left:1px solid var(--line)}
+    .article-title{font-size:clamp(20px,2.2vw,28px);font-weight:650;line-height:1.24;letter-spacing:-.025em;overflow-wrap:anywhere;transition:opacity .15s ease}
+    .article-main:hover .article-title{opacity:.55}
+    .article-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;font-size:10px;color:var(--muted)}
+    .article-tag{display:inline-flex;border:1px solid var(--line);padding:4px 7px;background:rgba(255,255,255,.35)}
+    .article-slug{overflow-wrap:anywhere}
+    .article-actions{display:grid;grid-template-columns:1fr 1fr;align-self:stretch;border-left:1px solid var(--line)}
+    .article-actions a,.article-actions span{display:flex;align-items:center;justify-content:center;padding:18px 12px;font-size:10px;font-weight:600;letter-spacing:.04em;color:#555;border-left:1px solid var(--line);transition:background .15s ease,color .15s ease}
+    .article-actions a:first-child,.article-actions span:first-child{border-left:0}
+    .article-actions a:hover{background:var(--ink);color:#fff}
+    .article-actions .disabled{color:#aaa;cursor:default}
+
+    .archive-foot{display:flex;justify-content:space-between;gap:20px;padding:18px 0;color:var(--muted);font-size:10px;letter-spacing:.04em}
+    .status{font-size:11px;color:var(--muted);line-height:1.7}
+    .empty{padding:58px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+
+    .login{max-width:560px;margin:70px auto 0;padding:28px;border:1px solid var(--line);background:var(--paper)}
+    .login h1{font-size:52px;line-height:.95;letter-spacing:-.045em;margin:10px 0 28px}
+    .field{margin-bottom:18px}
+    .field label{display:block;font-size:10px;color:var(--muted);letter-spacing:.12em;margin-bottom:8px}
+    .field input{width:100%;border:1px solid var(--line);padding:14px;background:#fff;outline:none}
+    .field input:focus{border-color:#777}
+
+    @media(max-width:820px){
+      .shell{width:min(100% - 28px,1120px);padding-top:22px}
+      .top{height:62px}
+      .top-links .site{display:none}
+      .hero{padding:38px 0 34px}
+      .hero h1{font-size:clamp(54px,17vw,82px)}
+      .archive-head{align-items:flex-start;flex-direction:column;padding:18px 0;gap:14px}
+      .archive-tools{width:100%;justify-content:space-between;gap:8px;overflow-x:auto}
+      .article-row{grid-template-columns:1fr;min-height:0;padding:0}
+      .article-side{padding:20px 0 0;flex-direction:row;align-items:center}
+      .article-main{padding:14px 0 22px;border-left:0}
+      .article-title{font-size:23px}
+      .article-actions{grid-template-columns:1fr 1fr;border-left:0;border-top:1px solid var(--line)}
+      .article-actions a,.article-actions span{padding:14px 8px}
+      .archive-foot{padding:14px 0}
+    }
   </style>
 </head>
 <body>
   <div class="shell">
     <div class="top">
-      <div><div class="brand">NOMAD FIELD</div><div class="sub">Private publishing studio</div></div>
-      <div class="top-links"><a class="btn secondary site" href="/" target="_blank">SITE ↗</a><a class="btn" href="/studio/editor/">新規記事</a></div>
+      <div>
+        <div class="brand">NOMAD FIELD</div>
+        <div class="sub">Private publishing studio</div>
+      </div>
+      <div class="top-links">
+        <a class="btn secondary site" href="/" target="_blank">SITE ↗</a>
+        <a class="btn" href="/studio/editor/">新規記事</a>
+      </div>
     </div>
 
-    <section id="loginPanel" class="panel login hidden">
-      <div class="sub">Private</div><h1>STUDIO</h1>
+    <section id="loginPanel" class="login hidden">
+      <div class="sub">Private</div>
+      <h1>STUDIO.</h1>
       <div class="field"><label>STUDIO PASSWORD</label><input id="password" type="password" autocomplete="current-password" /></div>
       <button id="loginBtn" class="btn">LOGIN</button>
-      <div id="loginStatus" class="status"></div>
+      <div id="loginStatus" class="status" style="margin-top:14px"></div>
     </section>
 
     <main id="articlesPanel" class="hidden">
       <section class="hero">
         <div class="eyebrow">Article archive</div>
         <h1>ARTICLES.</h1>
-        <p>公開済み・下書きの記事を一覧で管理します。タイトルを押すと編集画面へ移動します。</p>
+        <p>公開済み・下書きの記事を一覧で管理します。タイトルを選ぶと編集画面へ移動します。</p>
       </section>
-      <section class="panel">
-        <div style="display:flex;justify-content:space-between;gap:14px;align-items:center"><div class="sub">ALL NOTES</div><button id="refreshBtn" class="btn secondary">一覧更新</button></div>
+
+      <section class="archive">
+        <div class="archive-head">
+          <div class="archive-title">ALL NOTES</div>
+          <div class="archive-tools">
+            <div class="filters" aria-label="記事の絞り込み">
+              <button class="filter-btn active" data-filter="all">すべて</button>
+              <button class="filter-btn" data-filter="public">公開</button>
+              <button class="filter-btn" data-filter="draft">下書き</button>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">一覧更新 ↻</button>
+          </div>
+        </div>
         <div id="articleList" class="article-list"></div>
-        <div id="listStatus" class="status"></div>
+        <div class="archive-foot"><span id="listCount"></span><span id="listStatus" class="status"></span></div>
       </section>
     </main>
   </div>
@@ -45,32 +150,75 @@
   <script type="module" is:inline>
     const $=(id)=>document.getElementById(id);
     const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let articles=[];
+    let currentFilter='all';
 
     async function checkSession(){
       const res=await fetch('/api/studio/session',{cache:'no-store'});
       const data=await res.json();
-      if(!data.configured){$('loginPanel').classList.remove('hidden');$('loginStatus').textContent='Studioの初期設定がまだ完了していません。';return;}
-      if(data.authenticated){$('articlesPanel').classList.remove('hidden');loadArticles();}
-      else $('loginPanel').classList.remove('hidden');
+      if(!data.configured){
+        $('loginPanel').classList.remove('hidden');
+        $('loginStatus').textContent='Studioの初期設定がまだ完了していません。';
+        return;
+      }
+      if(data.authenticated){
+        $('articlesPanel').classList.remove('hidden');
+        loadArticles();
+      }else{
+        $('loginPanel').classList.remove('hidden');
+      }
+    }
+
+    function renderArticles(){
+      const visible=articles.filter(a=>currentFilter==='all'||(currentFilter==='draft'?a.draft:!a.draft));
+      $('articleList').innerHTML=visible.map(a=>{
+        const state=a.draft?'下書き':'公開';
+        const tags=(a.tags||[]).slice(0,4).map(tag=>`<span class="article-tag">${esc(tag)}</span>`).join('');
+        const editUrl=`/studio/editor/?slug=${encodeURIComponent(a.slug)}`;
+        const view=a.draft
+          ? '<span class="disabled">非公開</span>'
+          : `<a href="/notes/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">表示 ↗</a>`;
+        return `
+          <article class="article-row">
+            <div class="article-side">
+              <span class="article-state ${a.draft?'':'public'}">${state}</span>
+              <time class="article-date">${esc(a.pubDate||'')}</time>
+            </div>
+            <a class="article-main" href="${editUrl}">
+              <div class="article-title">${esc(a.title)}</div>
+              <div class="article-meta">${tags}<span class="article-slug">/${esc(a.slug)}/</span></div>
+            </a>
+            <div class="article-actions">
+              <a href="${editUrl}">編集 →</a>
+              ${view}
+            </div>
+          </article>`;
+      }).join('')||'<div class="empty">該当する記事はありません。</div>';
+      $('listCount').textContent=`${visible.length} / ${articles.length} ARTICLES`;
     }
 
     async function loadArticles(){
-      const status=$('listStatus');status.textContent='記事一覧を読み込み中…';
+      const status=$('listStatus');
+      status.textContent='LOADING…';
       try{
         const res=await fetch('/api/studio/articles',{cache:'no-store'});
         const data=await res.json().catch(()=>({}));
         if(!res.ok)throw new Error(data.error||'記事一覧を取得できませんでした。');
-        const articles=data.articles||[];
-        $('articleList').innerHTML=articles.map(a=>{
-          const state=a.draft?'下書き':'公開';
-          const tags=(a.tags||[]).slice(0,4).map(tag=>`<span>${esc(tag)}</span>`).join('');
-          const editUrl=`/studio/editor/?slug=${encodeURIComponent(a.slug)}`;
-          const view=a.draft?'':`<a href="/notes/${encodeURIComponent(a.slug)}/" target="_blank">表示 ↗</a>`;
-          return `<article class="article-row"><div class="article-date">${esc(a.pubDate||'')}</div><a class="article-main" href="${editUrl}"><span class="article-state ${a.draft?'':'public'}">${state}</span><div class="article-title">${esc(a.title)}</div><div class="article-meta">${tags}<span>/${esc(a.slug)}/</span></div></a><div class="article-actions"><a href="${editUrl}">編集 →</a>${view}</div></article>`;
-        }).join('')||'<div style="padding:22px 0;color:#777;font-size:12px">記事はまだありません。</div>';
-        status.textContent=`${articles.length}件の記事`;
-      }catch(e){status.textContent=e.message;}
+        articles=data.articles||[];
+        renderArticles();
+        status.textContent='';
+      }catch(e){
+        status.textContent=e.message;
+      }
     }
+
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        currentFilter=btn.dataset.filter||'all';
+        document.querySelectorAll('.filter-btn').forEach(x=>x.classList.toggle('active',x===btn));
+        renderArticles();
+      });
+    });
 
     $('refreshBtn').onclick=loadArticles;
     $('loginBtn').onclick=async()=>{
@@ -78,9 +226,15 @@
       const res=await fetch('/api/studio/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});
       const data=await res.json().catch(()=>({}));
       if(!res.ok){$('loginStatus').textContent=data.error||'ログインできませんでした。';return;}
-      $('loginPanel').classList.add('hidden');$('articlesPanel').classList.remove('hidden');loadArticles();
+      $('loginPanel').classList.add('hidden');
+      $('articlesPanel').classList.remove('hidden');
+      loadArticles();
     };
-    checkSession().catch(e=>{$('loginPanel').classList.remove('hidden');$('loginStatus').textContent=e.message;});
+
+    checkSession().catch(e=>{
+      $('loginPanel').classList.remove('hidden');
+      $('loginStatus').textContent=e.message;
+    });
   </script>
 </body>
 </html>

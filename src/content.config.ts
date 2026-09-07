@@ -12,7 +12,10 @@ const notes = defineCollection({
     draft: z.boolean().default(false),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
-    imageCaption: z.string().optional()
+    imageCaption: z.string().optional(),
+    lang: z.enum(['ja', 'en', 'es', 'zh', 'ko']).default('ja'),
+    slug: z.string().optional(),
+    translationKey: z.string().optional()
   }).superRefine((data, ctx) => {
     if (data.image && !data.imageAlt) {
       ctx.addIssue({

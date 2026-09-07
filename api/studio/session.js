@@ -9,7 +9,8 @@ export default function handler(req, res) {
     services: {
       github: Boolean(process.env.GITHUB_TOKEN),
       bunnyStorage: Boolean(process.env.BUNNY_STORAGE_ZONE && process.env.BUNNY_STORAGE_PASSWORD && process.env.BUNNY_STORAGE_CDN_URL),
-      bunnyStream: Boolean(process.env.BUNNY_STREAM_LIBRARY_ID && process.env.BUNNY_STREAM_API_KEY)
+      bunnyStream: Boolean(process.env.BUNNY_STREAM_LIBRARY_ID && process.env.BUNNY_STREAM_API_KEY),
+      translation: Boolean(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN)
     }
   });
 }

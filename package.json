@@ -1,6 +1,6 @@
 {
   "name": "masahiro-iwamatsu-nomad-field",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@astrojs/rss": "latest",
     "@astrojs/sitemap": "latest",
+    "@vercel/oidc": "latest",
     "astro": "latest",
     "sharp": "0.35.4"
   }

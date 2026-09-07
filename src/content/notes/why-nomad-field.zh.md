@@ -8,7 +8,6 @@ draft: false
 image: "https://nomad-field-media.b-cdn.net/notes/why-nomad-field/1788700213218-Barcelona_00003.webp"
 imageAlt: "为什么现在要写在以自己名字命名的域名上"
 lang: "zh"
-slug: "why-nomad-field"
 translationKey: "why-nomad-field"
 ---
 

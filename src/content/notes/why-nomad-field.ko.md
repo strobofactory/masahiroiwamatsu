@@ -8,7 +8,6 @@ draft: false
 image: "https://nomad-field-media.b-cdn.net/notes/why-nomad-field/1788700213218-Barcelona_00003.webp"
 imageAlt: "왜 지금, 내 이름의 도메인에 쓰는가"
 lang: "ko"
-slug: "why-nomad-field"
 translationKey: "why-nomad-field"
 ---
 

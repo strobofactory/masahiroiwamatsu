@@ -97,7 +97,7 @@ export default async function handler(req, res) {
       const detail = await directory.text().catch(() => '');
       return res.status(502).json({ error: 'Could not list articles from GitHub.', detail: detail.slice(0, 400) });
     }
-    const files = (await directory.json()).filter((file) => file.type === 'file' && /\.mdx?$/i.test(file.name));
+    const files = (await directory.json()).filter((file) => file.type === 'file' && /\.mdx?$/i.test(file.name) && !/\.(en|es|zh|ko)\.mdx?$/i.test(file.name));
     const articles = await Promise.all(files.map(fetchArticleFile));
     articles.sort((a, b) => String(b.pubDate).localeCompare(String(a.pubDate)) || a.title.localeCompare(b.title, 'ja'));
     return res.status(200).json({ ok: true, articles: articles.map(({ body, sha, ...item }) => item) });

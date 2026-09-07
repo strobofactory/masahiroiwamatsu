@@ -7,7 +7,7 @@ export function getStaticPaths(){ return publicLocales.map(lang => ({ params:{ l
 const { lang } = Astro.props as { lang: Locale };
 const t = copy[lang];
 const notes = (await getCollection('notes', ({data})=>!data.draft && data.lang === lang)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
-const noteSlug = (note) => note.data.slug ?? note.id;
+const noteSlug = (note) => note.data.translationKey ?? note.data.slug ?? note.id;
 const canonical = localizedPath(lang, '/notes/');
 ---
 <Base lang={lang} title="FIELD NOTES — Masahiro Iwamatsu" canonical={canonical} translationPath="/notes/">

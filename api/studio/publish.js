@@ -1,3 +1,4 @@
+import { getVercelOidcToken } from '@vercel/oidc';
 import { requireStudioAuth } from '../../lib/studio-auth.js';
 
 export const config = { maxDuration: 60 };
@@ -141,14 +142,20 @@ const translationSchema = {
   required: LOCALIZED_LANGS
 };
 
-function gatewayToken() {
-  return process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN || '';
+async function gatewayToken() {
+  if (process.env.AI_GATEWAY_API_KEY) return process.env.AI_GATEWAY_API_KEY;
+  if (process.env.VERCEL_OIDC_TOKEN) return process.env.VERCEL_OIDC_TOKEN;
+  try {
+    return (await getVercelOidcToken()) || '';
+  } catch {
+    return '';
+  }
 }
 
 async function translateWithClaude({ title, description, body, imageAlt, imageCaption }) {
-  const token = gatewayToken();
+  const token = await gatewayToken();
   if (!token) {
-    const error = new Error('Claude translation is not configured. Enable Vercel AI Gateway OIDC or set AI_GATEWAY_API_KEY.');
+    const error = new Error('Claude translation is not configured. Vercel OIDC could not be obtained; set AI_GATEWAY_API_KEY as a fallback.');
     error.status = 503;
     throw error;
   }

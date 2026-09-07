@@ -1,25 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { copy } from '../../i18n';
+const lang = 'ja' as const;
+const t = copy[lang];
 const description = '岩松正浩（Masahiro Iwamatsu）の公式プロフィール。映像制作を起点に、AI・業務自動化、アプリ開発、出版、音楽、ヘルスケアなど複数領域で企画・制作・運用を行う。';
 ---
-<Base title="ABOUT — Masahiro Iwamatsu" description={description}>
+<Base lang={lang} title="ABOUT — Masahiro Iwamatsu" description={description} translationPath="/about/">
   <main>
-    <section class="hero">
-      <div class="wrap">
-        <div class="eyebrow">Profile / Official Archive</div>
-        <h1>MASAHIRO<br/>IWAMATSU</h1>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap about-grid">
-        <h2>PRODUCER.<br/>BUILDER.<br/>PUBLISHER.</h2>
-        <div>
-          <p>岩松正浩。株式会社ストロボファクトリー代表取締役。映像業界で24年以上、企業映像、番組、ミュージックビデオ、eラーニング、ライブ配信などの制作に携わってきました。</p>
-          <p>現在は映像制作を起点に、AI・業務自動化、iOSアプリ開発、出版、音楽、ヘルスケア、オンライン教育などへ活動領域を広げ、企画から制作、運用まで自ら行っています。</p>
-          <p>NOMAD FIELDは、これらを肩書きや事業ごとに分断せず、一人の人間が実際に見て、作って、試した記録として残すための公式アーカイブです。</p>
-        </div>
-      </div>
-    </section>
+    <section class="hero"><div class="wrap"><div class="eyebrow">{t.profileEyebrow}</div><h1>MASAHIRO<br/>IWAMATSU</h1></div></section>
+    <section class="section"><div class="wrap about-grid"><h2>PRODUCER.<br/>BUILDER.<br/>PUBLISHER.</h2><div><p>{t.profileLine1}</p><p>{t.profileLine2}</p><p>{t.profileLine3}</p></div></div></section>
   </main>
 </Base>

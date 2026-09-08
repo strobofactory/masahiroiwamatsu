@@ -1,0 +1,88 @@
+---
+import type { Locale } from '../i18n';
+const { lang = 'ja' } = Astro.props as { lang?: Locale };
+
+const labels = {
+  ja: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '主な領域と実績' },
+  en: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: 'Selected fields and evidence' },
+  es: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: 'Áreas y trabajos seleccionados' },
+  zh: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '主要领域与代表项目' },
+  ko: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '주요 분야와 대표 작업' }
+}[lang];
+
+const fieldCopy = {
+  ja: [
+    ['FILM / VIDEO','24年以上の映像制作。企業映像、番組、ミュージックビデオ、eラーニング、ライブ配信。'],
+    ['AI / AUTOMATION','生成AIと業務自動化の企画・設計・実装。'],
+    ['SOFTWARE','iOSアプリ、Web、業務システムの企画・開発。'],
+    ['HEALTH','HAPIVERIを中心としたヘルスケア領域の企画・運用。'],
+    ['PUBLISHING','書籍・電子出版。'],
+    ['EDUCATION','NEXT ACADEMYなど、オンライン教育・研修。']
+  ],
+  en: [
+    ['FILM / VIDEO','More than 24 years in corporate video, television, music videos, e-learning, and live streaming.'],
+    ['AI / AUTOMATION','Planning, designing, and implementing generative AI and workflow automation.'],
+    ['SOFTWARE','Planning and development of iOS apps, web products, and business systems.'],
+    ['HEALTH','Healthcare projects and operations centered on HAPIVERI.'],
+    ['PUBLISHING','Books and digital publishing.'],
+    ['EDUCATION','Online education and training, including NEXT ACADEMY.']
+  ],
+  es: [
+    ['FILM / VIDEO','Más de 24 años en vídeo corporativo, televisión, videoclips, e-learning y streaming en directo.'],
+    ['AI / AUTOMATION','Planificación, diseño e implementación de IA generativa y automatización de procesos.'],
+    ['SOFTWARE','Planificación y desarrollo de apps iOS, productos web y sistemas empresariales.'],
+    ['HEALTH','Proyectos y operaciones de salud centrados en HAPIVERI.'],
+    ['PUBLISHING','Libros y publicación digital.'],
+    ['EDUCATION','Educación y formación online, incluido NEXT ACADEMY.']
+  ],
+  zh: [
+    ['FILM / VIDEO','拥有24年以上企业影像、电视节目、音乐视频、在线学习与直播制作经验。'],
+    ['AI / AUTOMATION','生成式AI与业务自动化的策划、设计与实施。'],
+    ['SOFTWARE','iOS应用、Web产品与业务系统的策划和开发。'],
+    ['HEALTH','以HAPIVERI为中心的健康领域项目与运营。'],
+    ['PUBLISHING','书籍与数字出版。'],
+    ['EDUCATION','包括NEXT ACADEMY在内的在线教育与培训。']
+  ],
+  ko: [
+    ['FILM / VIDEO','24년 이상 기업 영상, 방송, 뮤직비디오, e러닝, 라이브 스트리밍 제작.'],
+    ['AI / AUTOMATION','생성형 AI와 업무 자동화의 기획·설계·구현.'],
+    ['SOFTWARE','iOS 앱, 웹 제품, 업무 시스템의 기획·개발.'],
+    ['HEALTH','HAPIVERI를 중심으로 한 헬스케어 프로젝트와 운영.'],
+    ['PUBLISHING','도서 및 디지털 출판.'],
+    ['EDUCATION','NEXT ACADEMY를 포함한 온라인 교육과 연수.']
+  ]
+}[lang];
+
+const selected = [
+  ['OIST','PPE video'],
+  ['GE Healthcare','e-learning'],
+  ['J:COM','program production'],
+  ['Mitsubishi Materials','DVD production'],
+  ['ELLIE','music video editing'],
+  ['STROBOFACTORY','video production / live streaming'],
+  ['HAPIVERI','healthcare'],
+  ['NEXT ACADEMY','online education'],
+  ['yamago','iOS hiking GPS app']
+];
+---
+<section class="section profile-evidence">
+  <div class="wrap">
+    <div class="evidence-intro"><div class="eyebrow">{labels.role}</div></div>
+    <div class="evidence-block">
+      <div class="evidence-title">{labels.fields}</div>
+      <div class="field-grid">
+        {fieldCopy.map(([name, description], index) => <div class="field-row"><span class="field-num">{String(index + 1).padStart(2,'0')}</span><div><strong>{name}</strong><p>{description}</p></div></div>)}
+      </div>
+    </div>
+    <div class="evidence-block selected-block">
+      <div class="evidence-title">{labels.selected}</div>
+      <div class="selected-list">
+        {selected.map(([name, detail]) => <div class="selected-row"><strong>{name}</strong><span>{detail}</span></div>)}
+      </div>
+    </div>
+  </div>
+</section>
+<style is:global>
+  .profile-evidence{padding-top:44px}.evidence-intro{margin-bottom:22px}.evidence-block{border-top:1px solid var(--line)}.evidence-title{padding:18px 0;font-size:11px;font-weight:600;letter-spacing:.14em}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}.field-row{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:22px 18px 22px 0;border-bottom:1px solid var(--line)}.field-row:nth-child(odd){border-right:1px solid var(--line)}.field-row:nth-child(even){padding-left:18px}.field-num{font-size:10px;color:var(--muted);letter-spacing:.12em}.field-row strong{font-size:15px;letter-spacing:.02em}.field-row p{margin:8px 0 0;color:#555;font-size:13px;line-height:1.75}.selected-block{margin-top:38px}.selected-list{border-top:1px solid var(--line)}.selected-row{display:grid;grid-template-columns:minmax(180px,.8fr) 1.2fr;gap:24px;padding:15px 0;border-bottom:1px solid var(--line);font-size:13px}.selected-row span{color:var(--muted)}
+  @media(max-width:780px){.field-grid{grid-template-columns:1fr}.field-row,.field-row:nth-child(even){padding:18px 0;border-right:0}.selected-row{grid-template-columns:1fr;gap:5px}}
+</style>

@@ -3,11 +3,11 @@ import type { Locale } from '../i18n';
 const { lang = 'ja' } = Astro.props as { lang?: Locale };
 
 const labels = {
-  ja: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '主な領域と実績' },
-  en: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: 'Selected fields and evidence' },
-  es: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: 'Áreas y trabajos seleccionados' },
-  zh: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '主要领域与代表项目' },
-  ko: { fields: 'FIELDS', selected: 'SELECTED WORK / PROJECTS', role: '주요 분야와 대표 작업' }
+  ja: { fields: 'FIELDS', role: '主な活動領域' },
+  en: { fields: 'FIELDS', role: 'Primary fields' },
+  es: { fields: 'FIELDS', role: 'Áreas principales' },
+  zh: { fields: 'FIELDS', role: '主要领域' },
+  ko: { fields: 'FIELDS', role: '주요 활동 분야' }
 }[lang];
 
 const fieldCopy = {
@@ -52,18 +52,6 @@ const fieldCopy = {
     ['EDUCATION','NEXT ACADEMY를 포함한 온라인 교육과 연수.']
   ]
 }[lang];
-
-const selected = [
-  ['OIST','PPE video'],
-  ['GE Healthcare','e-learning'],
-  ['J:COM','program production'],
-  ['Mitsubishi Materials','DVD production'],
-  ['ELLIE','music video editing'],
-  ['STROBOFACTORY','video production / live streaming'],
-  ['HAPIVERI','healthcare'],
-  ['NEXT ACADEMY','online education'],
-  ['yamago','iOS hiking GPS app']
-];
 ---
 <section class="section profile-evidence">
   <div class="wrap">
@@ -74,15 +62,9 @@ const selected = [
         {fieldCopy.map(([name, description], index) => <div class="field-row"><span class="field-num">{String(index + 1).padStart(2,'0')}</span><div><strong>{name}</strong><p>{description}</p></div></div>)}
       </div>
     </div>
-    <div class="evidence-block selected-block">
-      <div class="evidence-title">{labels.selected}</div>
-      <div class="selected-list">
-        {selected.map(([name, detail]) => <div class="selected-row"><strong>{name}</strong><span>{detail}</span></div>)}
-      </div>
-    </div>
   </div>
 </section>
 <style is:global>
-  .profile-evidence{padding-top:44px}.evidence-intro{margin-bottom:22px}.evidence-block{border-top:1px solid var(--line)}.evidence-title{padding:18px 0;font-size:11px;font-weight:600;letter-spacing:.14em}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}.field-row{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:22px 18px 22px 0;border-bottom:1px solid var(--line)}.field-row:nth-child(odd){border-right:1px solid var(--line)}.field-row:nth-child(even){padding-left:18px}.field-num{font-size:10px;color:var(--muted);letter-spacing:.12em}.field-row strong{font-size:15px;letter-spacing:.02em}.field-row p{margin:8px 0 0;color:#555;font-size:13px;line-height:1.75}.selected-block{margin-top:38px}.selected-list{border-top:1px solid var(--line)}.selected-row{display:grid;grid-template-columns:minmax(180px,.8fr) 1.2fr;gap:24px;padding:15px 0;border-bottom:1px solid var(--line);font-size:13px}.selected-row span{color:var(--muted)}
-  @media(max-width:780px){.field-grid{grid-template-columns:1fr}.field-row,.field-row:nth-child(even){padding:18px 0;border-right:0}.selected-row{grid-template-columns:1fr;gap:5px}}
+  .profile-evidence{padding-top:44px}.evidence-intro{margin-bottom:22px}.evidence-block{border-top:1px solid var(--line)}.evidence-title{padding:18px 0;font-size:11px;font-weight:600;letter-spacing:.14em}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}.field-row{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:22px 18px 22px 0;border-bottom:1px solid var(--line)}.field-row:nth-child(odd){border-right:1px solid var(--line)}.field-row:nth-child(even){padding-left:18px}.field-num{font-size:10px;color:var(--muted);letter-spacing:.12em}.field-row strong{font-size:15px;letter-spacing:.02em}.field-row p{margin:8px 0 0;color:#555;font-size:13px;line-height:1.75}
+  @media(max-width:780px){.field-grid{grid-template-columns:1fr}.field-row,.field-row:nth-child(even){padding:18px 0;border-right:0}}
 </style>

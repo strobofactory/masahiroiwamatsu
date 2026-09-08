@@ -1,0 +1,48 @@
+---
+---
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>NOMAD FIELD Studio — Web Review</title>
+  <style>
+    :root{--bg:#f7f7f3;--ink:#111;--muted:#777;--line:#d8d8d1;--paper:#fff;--ok:#315d3b;--warn:#8b5a00}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif}a{color:inherit;text-decoration:none}button{font:inherit;border-radius:0}
+    .shell{width:min(980px,calc(100% - 36px));margin:0 auto;padding:28px 0 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--line)}.brand{font-size:14px;font-weight:750;letter-spacing:.09em}.links{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:10px 13px;font-size:10px;font-weight:650;cursor:pointer}.btn.secondary{background:transparent;color:var(--ink);border-color:var(--line)}.btn:disabled{opacity:.35;cursor:not-allowed}
+    .hero{padding:50px 0 34px}.eyebrow{font-size:9px;letter-spacing:.18em;color:var(--muted)}h1{font-size:clamp(48px,8vw,88px);letter-spacing:-.055em;line-height:.9;margin:14px 0 18px}.hero p{margin:0;max-width:720px;font-size:12px;line-height:1.9;color:#555}
+    .panel{border-top:1px solid var(--ink)}.row{display:grid;grid-template-columns:190px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}.label{font-size:9px;letter-spacing:.14em;color:var(--muted)}.value{font-size:13px;line-height:1.7}.sha{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}.state{font-weight:650}.state.ok{color:var(--ok)}.state.warn{color:var(--warn)}.actions{display:flex;gap:10px;flex-wrap:wrap;padding-top:26px}.status{margin-top:14px;font-size:11px;line-height:1.7;color:var(--muted)}.note{margin-top:28px;padding:16px 18px;border:1px solid var(--line);background:rgba(255,255,255,.45);font-size:11px;line-height:1.8;color:#555}.hidden{display:none!important}
+    @media(max-width:700px){.row{grid-template-columns:1fr;gap:7px}.top{align-items:flex-start}.links{justify-content:flex-end}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top"><div class="brand">NOMAD FIELD / WEB REVIEW</div><div class="links"><a class="btn secondary" href="/studio/">← STUDIO</a><a class="btn secondary" href="/" target="_blank">SITE ↗</a></div></div>
+    <main id="main" class="hidden">
+      <section class="hero"><div class="eyebrow">REVIEW BEFORE PRODUCTION</div><h1>WEB<br/>REVIEW.</h1><p>サイト全体のコード・デザイン変更は review ブランチで確認し、問題がなければここから main へ反映します。review が main と分岐した場合は自動反映を停止します。</p></section>
+      <section class="panel">
+        <div class="row"><div class="label">STATUS</div><div id="state" class="value state">確認中…</div></div>
+        <div class="row"><div class="label">MAIN</div><div id="mainSha" class="value sha">—</div></div>
+        <div class="row"><div class="label">REVIEW</div><div id="reviewSha" class="value sha">—</div></div>
+        <div class="row"><div class="label">DIFF</div><div id="diff" class="value">—</div></div>
+      </section>
+      <div class="actions"><a id="previewBtn" class="btn secondary" href="#" target="_blank" rel="noopener">Vercel Previewを開く ↗</a><button id="promoteBtn" class="btn" disabled>本サイトに反映</button><button id="refreshBtn" class="btn secondary">状態を更新</button></div>
+      <div id="status" class="status"></div>
+      <div class="note">Vercel Preview Protectionが有効な場合、Previewを開く際にVercelへのログインが求められます。本サイトへの反映は review が main より先行し、かつ分岐していない場合だけ実行できます。</div>
+    </main>
+    <div id="loginMessage" class="status">Studioセッションを確認中…</div>
+  </div>
+<script type="module" is:inline>
+  const $=id=>document.getElementById(id);let current=null;
+  async function auth(){const r=await fetch('/api/studio/session',{cache:'no-store'});const d=await r.json();if(!d.authenticated){location.href='/studio/';return false;}$('loginMessage').classList.add('hidden');$('main').classList.remove('hidden');return true;}
+  async function load(){
+    $('status').textContent='review ブランチを確認中…';
+    try{const r=await fetch('/api/studio/review-status',{cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'状態を取得できませんでした。');current=d;$('mainSha').textContent=(d.mainSha||'').slice(0,12);$('reviewSha').textContent=(d.reviewSha||'').slice(0,12);$('diff').textContent=`review は main より ${d.aheadBy} commit先行 / ${d.behindBy} commit遅れ`;$('previewBtn').href=d.previewUrl||'#';const same=d.aheadBy===0&&d.behindBy===0;if(same){$('state').textContent='本番とレビューは同じ状態です';$('state').className='value state ok';}else if(d.canPromote){$('state').textContent='レビュー待ち — 本番反映可能';$('state').className='value state ok';}else{$('state').textContent='分岐あり — 自動反映停止';$('state').className='value state warn';}$('promoteBtn').disabled=!d.canPromote;$('status').textContent='';}catch(e){$('status').textContent=e.message;$('promoteBtn').disabled=true;}
+  }
+  $('refreshBtn').onclick=load;
+  $('promoteBtn').onclick=async()=>{if(!current?.canPromote)return;if(!confirm(`review の ${current.aheadBy} commitを本サイトへ反映します。\n\nVercel Previewで確認済みですか？`))return;$('promoteBtn').disabled=true;$('status').textContent='本サイトへ反映中…';try{const r=await fetch('/api/studio/promote-review',{method:'POST'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'本番反映に失敗しました。');$('status').textContent=d.message||'本番反映を開始しました。';setTimeout(load,1800);}catch(e){$('status').textContent=e.message;await load();}};
+  auth().then(ok=>ok&&load()).catch(e=>{$('loginMessage').textContent=e.message;});
+</script>
+</body>
+</html>

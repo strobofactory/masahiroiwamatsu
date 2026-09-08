@@ -70,7 +70,7 @@
 
   <script type="module" is:inline>
     const $=(id)=>document.getElementById(id);
-    const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+    const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     let articles=[];let currentFilter='all';let query='';
 
     async function checkSession(){

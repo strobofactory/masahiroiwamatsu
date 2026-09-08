@@ -1,0 +1,48 @@
+---
+---
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>NOMAD FIELD Studio — Article Review</title>
+  <style>
+    :root{--bg:#f7f7f3;--ink:#121212;--muted:#777;--line:#d9d9d2;--paper:#fff;--font:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Noto Sans JP",Arial,sans-serif}
+    *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font)}a{color:inherit;text-decoration:none}button{font:inherit;border-radius:0}.reviewbar{position:sticky;top:0;z-index:30;background:#111;color:#fff;border-bottom:1px solid #333}.reviewbar-in{width:min(1180px,calc(100% - 36px));height:58px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px}.review-label{font-size:10px;font-weight:700;letter-spacing:.15em}.review-actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid #fff;background:#fff;color:#111;padding:9px 12px;font-size:10px;font-weight:650;cursor:pointer}.btn.secondary{background:transparent;color:#fff;border-color:#555}.btn:disabled{opacity:.4;cursor:not-allowed}.statusbar{width:min(920px,calc(100% - 36px));margin:18px auto 0;font-size:11px;color:var(--muted);line-height:1.7}.article{width:min(920px,calc(100% - 36px));margin:0 auto;padding:58px 0 76px}.eyebrow{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}.article h1{font-size:clamp(40px,7vw,72px);font-weight:700;line-height:1.06;letter-spacing:-.035em;margin:20px 0}.lead{font-size:18px;line-height:1.8;color:#444}.article-cover{width:100%;margin:42px 0 0}.article-cover img{display:block;width:100%;aspect-ratio:2.39/1;object-fit:cover}.article-cover figcaption{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.6}.content{margin-top:52px;font-size:17px;line-height:2}.content h2{font-size:30px;font-weight:700;letter-spacing:-.025em;margin-top:60px}.content h3{font-size:22px;font-weight:600;margin-top:42px}.content a{text-decoration:underline;text-underline-offset:3px}.content blockquote{margin:36px 0;padding-left:20px;border-left:1px solid var(--ink);color:#444}.content img{display:block;width:100%;aspect-ratio:2.39/1;object-fit:cover;margin:42px 0}.content pre{overflow:auto;padding:18px;background:#eee}.empty{padding:80px 18px;text-align:center;color:var(--muted)}.hidden{display:none!important}@media(max-width:700px){.reviewbar-in{height:auto;min-height:58px;padding:9px 0;align-items:flex-start}.review-actions{flex-wrap:wrap;justify-content:flex-end}.article{padding-top:42px}}
+  </style>
+</head>
+<body>
+  <header class="reviewbar"><div class="reviewbar-in"><div class="review-label">ARTICLE REVIEW / NOT PUBLISHED</div><div class="review-actions"><button id="backBtn" class="btn secondary">← 編集に戻る</button><a class="btn secondary" href="/studio/web-review/">WEB REVIEW</a><button id="publishBtn" class="btn">本サイトに反映</button></div></div></header>
+  <div id="status" class="statusbar">レビュー原稿を読み込み中…</div>
+  <main id="preview" class="hidden"><article class="article"><div id="meta" class="eyebrow"></div><h1 id="title"></h1><p id="lead" class="lead"></p><figure id="cover" class="article-cover hidden"><img id="coverImg" alt="" /><figcaption id="caption"></figcaption></figure><div id="content" class="content"></div></article></main>
+  <div id="empty" class="empty hidden">レビューする原稿がありません。Studioの編集画面から「レビュー」を押してください。</div>
+<script type="module" is:inline>
+  import { marked } from 'https://cdn.jsdelivr.net/npm/marked@15.0.12/+esm';
+  const $=id=>document.getElementById(id);const KEY='nomad-field-article-review';let article=null;
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  async function checkAuth(){const r=await fetch('/api/studio/session',{cache:'no-store'});const d=await r.json();if(!d.authenticated){location.href='/studio/';return false;}return true;}
+  function render(){
+    const raw=localStorage.getItem(KEY);if(!raw){$('status').classList.add('hidden');$('empty').classList.remove('hidden');$('publishBtn').disabled=true;return;}
+    try{article=JSON.parse(raw);}catch(_){article=null;}
+    if(!article){$('status').textContent='レビュー原稿を読み込めませんでした。';$('publishBtn').disabled=true;return;}
+    $('title').textContent=article.title||'(無題)';$('lead').textContent=article.description||'';$('meta').textContent=[article.pubDate,...(article.tags||[])].filter(Boolean).join(' / ');$('content').innerHTML=marked.parse(article.body||'');
+    if(article.image){$('coverImg').src=article.image;$('coverImg').alt=article.imageAlt||article.title||'';$('caption').textContent=article.imageCaption||'';$('cover').classList.remove('hidden');}else{$('cover').classList.add('hidden');}
+    $('preview').classList.remove('hidden');$('status').textContent='この画面はレビュー専用です。まだ本サイトには反映されていません。';
+  }
+  $('backBtn').onclick=()=>{window.close();if(!window.closed)history.back();};
+  $('publishBtn').onclick=async()=>{
+    if(!article)return;
+    if(!confirm(`「${article.title||article.slug}」を本サイトに反映します。\n\nこのレビュー内容で公開してよいですか？`))return;
+    const btn=$('publishBtn');btn.disabled=true;btn.textContent='反映中…';$('status').textContent='GitHubへ保存し、多言語版を生成しています…';
+    try{
+      const payload={...article,draft:false};
+      const r=await fetch('/api/studio/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'本サイトへの反映に失敗しました。');
+      localStorage.setItem('nomad-field-last-published',JSON.stringify({slug:d.slug,at:Date.now()}));
+      $('status').innerHTML=`本サイトへの反映を開始しました。Vercelの反映後に公開されます。 <a href="${esc(d.url||('/notes/'+d.slug+'/'))}" target="_blank" style="text-decoration:underline">公開ページを確認 ↗</a>`;btn.textContent='反映済み';
+    }catch(e){$('status').textContent=e.message||'本サイトへの反映に失敗しました。';btn.disabled=false;btn.textContent='本サイトに反映';}
+  };
+  checkAuth().then(ok=>ok&&render()).catch(e=>{$('status').textContent=e.message;});
+</script>
+</body>
+</html>

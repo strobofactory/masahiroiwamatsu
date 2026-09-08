@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import ProfileEvidence from '../../components/ProfileEvidence.astro';
 import { copy } from '../../i18n';
 const lang = 'ja' as const;
 const t = copy[lang];
@@ -9,5 +10,6 @@ const description = '岩松正浩（Masahiro Iwamatsu）の公式プロフィー
   <main>
     <section class="hero"><div class="wrap"><div class="eyebrow">{t.profileEyebrow}</div><h1>MASAHIRO<br/>IWAMATSU</h1></div></section>
     <section class="section"><div class="wrap about-grid"><h2>PRODUCER.<br/>BUILDER.<br/>PUBLISHER.</h2><div><p>{t.profileLine1}</p><p>{t.profileLine2}</p><p>{t.profileLine3}</p></div></div></section>
+    <ProfileEvidence lang={lang} />
   </main>
 </Base>

@@ -34,6 +34,7 @@
       if(top&&!doc.querySelector('.studio-list-link')){
         const link=doc.createElement('a');
         link.href='/studio/';
+        link.target='_top';
         link.className='studio-list-link';
         link.textContent='← 記事一覧';
         top.appendChild(link);

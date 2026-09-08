@@ -18,8 +18,16 @@
   <script is:inline>
     const frame=document.getElementById('studioEditor');
     const initialSlug=new URLSearchParams(location.search).get('slug')||'';
+    const REVIEW_KEY='nomad-field-article-review';
     let timer=null;
     let dirty=false;
+
+    function makeSlug(value){
+      const base=String(value||'').normalize('NFKD').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,100);
+      if(base)return base;
+      const d=new Date(),p=n=>String(n).padStart(2,'0');
+      return `field-note-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+    }
 
     function prepareEditor(){
       let doc;
@@ -27,65 +35,60 @@
       if(!doc)return;
 
       const style=doc.createElement('style');
-      style.textContent=`section.panel:has(#articleSelect){display:none!important}.top a[href="/"]{display:none!important}.studio-list-link{font-size:11px;letter-spacing:.08em;color:#666;text-decoration:none;border:1px solid #d9d9d2;padding:8px 10px;background:#fff}.studio-list-link:hover{color:#111;border-color:#999}.studio-delete-btn{border-color:#b9a8a8!important;color:#8a3030!important}.studio-delete-btn:hover{border-color:#8a3030!important;background:#fff7f7!important}.studio-save-note{font-size:10px;color:#777;margin-top:8px}`;
+      style.textContent=`section.panel:has(#articleSelect){display:none!important}.top a[href="/"]{display:none!important}#publishBtn{display:none!important}.studio-list-link,.studio-web-review-link{font-size:11px;letter-spacing:.08em;color:#666;text-decoration:none;border:1px solid #d9d9d2;padding:8px 10px;background:#fff}.studio-list-link:hover,.studio-web-review-link:hover{color:#111;border-color:#999}.studio-review-btn{background:#111!important;color:#fff!important;border-color:#111!important}.studio-review-btn:hover{background:#333!important}.studio-delete-btn{border-color:#b9a8a8!important;color:#8a3030!important}.studio-delete-btn:hover{border-color:#8a3030!important;background:#fff7f7!important}.studio-save-note{font-size:10px;color:#777;margin-top:8px}`;
       doc.head.appendChild(style);
 
       const top=doc.querySelector('.top');
       if(top&&!doc.querySelector('.studio-list-link')){
-        const link=doc.createElement('a');
-        link.href='/studio/';
-        link.target='_top';
-        link.className='studio-list-link';
-        link.textContent='← 記事一覧';
-        top.appendChild(link);
+        const list=doc.createElement('a');list.href='/studio/';list.target='_top';list.className='studio-list-link';list.textContent='← 記事一覧';top.appendChild(list);
+        const web=doc.createElement('a');web.href='/studio/web-review/';web.target='_top';web.className='studio-web-review-link';web.textContent='WEB REVIEW';top.appendChild(web);
       }
 
       const publishPanel=[...doc.querySelectorAll('section.panel')].find(x=>x.querySelector('#publishBtn'));
       const actions=publishPanel?.querySelector('.actions');
-      if(actions&&!doc.getElementById('studioDeleteArticleBtn')){
-        const del=doc.createElement('button');
-        del.id='studioDeleteArticleBtn';
-        del.type='button';
-        del.className='btn secondary studio-delete-btn';
-        del.textContent='記事を削除';
-        del.disabled=true;
-        del.addEventListener('click',async()=>{
+      if(actions&&!doc.getElementById('studioReviewBtn')){
+        const review=doc.createElement('button');
+        review.id='studioReviewBtn';review.type='button';review.className='btn studio-review-btn';review.textContent='レビュー';
+        review.addEventListener('click',()=>{
+          const title=String(doc.getElementById('title')?.value||'').trim();
+          const description=String(doc.getElementById('description')?.value||'').trim();
+          const body=String(doc.getElementById('body')?.value||'').trim();
+          if(!title||!description||!body){alert('タイトル、概要、本文を入力してからレビューしてください。');return;}
           const slugInput=doc.getElementById('slug');
-          const slug=String(slugInput?.value||'').trim();
-          if(!slug||!slugInput?.disabled)return;
-          const mode=doc.getElementById('articleMode')?.textContent||'';
-          const published=mode.includes('公開済み');
+          const slug=String(slugInput?.value||'').trim()||makeSlug(title);
+          if(slugInput&&!slugInput.value)slugInput.value=slug;
+          const mode=String(doc.getElementById('articleMode')?.textContent||'');
+          const date=(mode.match(/\d{4}-\d{2}-\d{2}/)||[])[0]||new Date().toISOString().slice(0,10);
+          const payload={
+            title,description,slug,
+            originalSlug:slugInput?.disabled?slug:'',
+            pubDate:date,
+            tags:String(doc.getElementById('tags')?.value||'').split(/[,、]/).map(x=>x.trim()).filter(Boolean),
+            body,
+            image:String(doc.getElementById('coverImage')?.value||'').trim(),
+            imageAlt:String(doc.getElementById('coverAlt')?.value||'').trim(),
+            imageCaption:String(doc.getElementById('coverCaption')?.value||'').trim()
+          };
+          localStorage.setItem(REVIEW_KEY,JSON.stringify(payload));
+          window.open('/studio/review/','nomadFieldArticleReview');
+        });
+        actions.appendChild(review);
+
+        const del=doc.createElement('button');
+        del.id='studioDeleteArticleBtn';del.type='button';del.className='btn secondary studio-delete-btn';del.textContent='記事を削除';del.disabled=true;
+        del.addEventListener('click',async()=>{
+          const slugInput=doc.getElementById('slug');const slug=String(slugInput?.value||'').trim();if(!slug||!slugInput?.disabled)return;
+          const mode=doc.getElementById('articleMode')?.textContent||'';const published=mode.includes('公開済み');
           const message=(published?'公開中の記事':'下書き')+`「${doc.getElementById('title')?.value||slug}」を削除します。\n\n日本語と翻訳4言語の記事ファイルを削除します。画像・動画ファイルはBunny上に残します。\n\nこの操作を続けますか？`;
-          if(!confirm(message))return;
-          del.disabled=true;
-          del.textContent='削除中…';
-          try{
-            const res=await fetch('/api/studio/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug})});
-            const data=await res.json().catch(()=>({}));
-            if(!res.ok)throw new Error(data.error||'削除に失敗しました。');
-            dirty=false;
-            window.top.location.href='/studio/?deleted='+encodeURIComponent(slug);
-          }catch(e){
-            alert(e.message||'削除に失敗しました。');
-            del.textContent='記事を削除';
-            syncDeleteState();
-          }
+          if(!confirm(message))return;del.disabled=true;del.textContent='削除中…';
+          try{const res=await fetch('/api/studio/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||'削除に失敗しました。');dirty=false;window.top.location.href='/studio/?deleted='+encodeURIComponent(slug);}catch(e){alert(e.message||'削除に失敗しました。');del.textContent='記事を削除';syncDeleteState();}
         });
         actions.appendChild(del);
-        const note=doc.createElement('div');
-        note.className='studio-save-note';
-        note.textContent='削除してもBunny Storage / Stream上の画像・動画は自動削除しません。';
-        publishPanel.appendChild(note);
+        const note=doc.createElement('div');note.className='studio-save-note';note.textContent='公開は「レビュー」画面から行います。削除してもBunny Storage / Stream上の画像・動画は自動削除しません。';publishPanel.appendChild(note);
       }
 
-      function syncDeleteState(){
-        const slugInput=doc.getElementById('slug');
-        const del=doc.getElementById('studioDeleteArticleBtn');
-        if(del)del.disabled=!(slugInput?.disabled&&String(slugInput.value||'').trim());
-      }
-      window.syncDeleteState=syncDeleteState;
-      syncDeleteState();
-      setInterval(syncDeleteState,700);
+      function syncDeleteState(){const slugInput=doc.getElementById('slug');const del=doc.getElementById('studioDeleteArticleBtn');if(del)del.disabled=!(slugInput?.disabled&&String(slugInput.value||'').trim());}
+      window.syncDeleteState=syncDeleteState;syncDeleteState();setInterval(syncDeleteState,700);
 
       const trackedIds=['title','description','slug','tags','body','coverImage','coverAlt','coverCaption'];
       doc.addEventListener('input',e=>{if(trackedIds.includes(e.target?.id))dirty=true;});
@@ -93,35 +96,14 @@
       doc.addEventListener('click',e=>{if(e.target?.id==='parseBtn'||e.target?.classList?.contains('mini'))dirty=true;});
 
       const publishStatus=doc.getElementById('publishStatus');
-      if(publishStatus){
-        new MutationObserver(()=>{
-          const text=publishStatus.textContent||'';
-          if(text.includes('下書きを保存しました')||text.includes('保存しました'))dirty=false;
-          syncDeleteState();
-        }).observe(publishStatus,{childList:true,subtree:true,characterData:true});
-      }
+      if(publishStatus)new MutationObserver(()=>{const text=publishStatus.textContent||'';if(text.includes('下書きを保存しました')||text.includes('保存しました'))dirty=false;syncDeleteState();}).observe(publishStatus,{childList:true,subtree:true,characterData:true});
 
       if(!initialSlug)return;
-      let attempts=0;
-      clearInterval(timer);
-      timer=setInterval(()=>{
-        attempts++;
-        const select=doc.getElementById('articleSelect');
-        if(select&&[...select.options].some(o=>o.value===initialSlug)){
-          select.value=initialSlug;
-          select.dispatchEvent(new Event('change',{bubbles:true}));
-          dirty=false;
-          clearInterval(timer);
-        }else if(attempts>80){clearInterval(timer);}
-      },250);
+      let attempts=0;clearInterval(timer);timer=setInterval(()=>{attempts++;const select=doc.getElementById('articleSelect');if(select&&[...select.options].some(o=>o.value===initialSlug)){select.value=initialSlug;select.dispatchEvent(new Event('change',{bubbles:true}));dirty=false;clearInterval(timer);}else if(attempts>80){clearInterval(timer);}},250);
     }
 
-    window.addEventListener('beforeunload',e=>{
-      if(!dirty)return;
-      e.preventDefault();
-      e.returnValue='';
-    });
-
+    window.addEventListener('storage',e=>{if(e.key==='nomad-field-last-published')dirty=false;});
+    window.addEventListener('beforeunload',e=>{if(!dirty)return;e.preventDefault();e.returnValue='';});
     frame.addEventListener('load',prepareEditor);
   </script>
 </body>

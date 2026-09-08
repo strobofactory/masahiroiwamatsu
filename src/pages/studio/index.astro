@@ -31,7 +31,7 @@
   <div class="shell">
     <div class="top">
       <div><div class="brand">NOMAD FIELD</div><div class="sub">Private publishing studio</div></div>
-      <div class="top-links"><a class="btn secondary site" href="/" target="_blank">SITE ↗</a><button id="logoutTopBtn" class="btn secondary hidden">ログアウト</button><a class="btn" href="/studio/editor/">新規記事</a></div>
+      <div class="top-links"><a class="btn" href="/studio/editor/">新規記事</a><a class="btn secondary site" href="/" target="_blank">SITE ↗</a><button id="logoutTopBtn" class="btn secondary hidden">ログアウト</button></div>
     </div>
 
     <section id="loginPanel" class="login hidden">
@@ -67,7 +67,6 @@
       </section>
     </main>
   </div>
-
   <script type="module" is:inline>
     const $=(id)=>document.getElementById(id);
     const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

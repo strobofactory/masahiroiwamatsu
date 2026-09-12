@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="title">
   <title id="title">NOMAD FIELD</title>
-  <rect width="64" height="64" rx="10" fill="#121212"/>
-  <path d="M14 46V18h6.5l13 17V18H40v28h-6.4l-13.1-17V46H14Z" fill="#f7f7f3"/>
-  <path d="M44 18h7v28h-7z" fill="#f7f7f3" opacity=".45"/>
+  <g fill="none" stroke="#121212" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M33 18A36 36 0 0 1 82 42"/>
+    <path d="M82 54A36 36 0 0 1 66 79"/>
+    <path d="M58 84A36 36 0 0 1 20 47A36 36 0 0 1 26 34"/>
+    <path d="M27 34L66 74"/>
+    <path d="M64 48H83"/>
+  </g>
 </svg>

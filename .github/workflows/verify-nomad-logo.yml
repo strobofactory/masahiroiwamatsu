@@ -1,0 +1,83 @@
+name: Verify production NOMAD FIELD header logo
+on:
+  push:
+    branches: [fix/nomad-original-png-20260913]
+    paths: [.github/workflows/verify-nomad-logo.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Install browser automation client
+        run: python3 -m pip install playwright==1.55.0
+      - name: Check original bytes, browser decoding and header rendering
+        run: |
+          mkdir -p evidence
+          python3 - <<'PY'
+          import hashlib, json, pathlib, shutil, subprocess, time, urllib.request
+          from playwright.sync_api import sync_playwright
+          home = 'https://www.masahiroiwamatsu.com/'
+          image = home + 'logos/logo_v2.png?v=014907230d41'
+          expected = '014907230d410e7f737e3071448b361a226703bc0fe8dde1dd9b818a0232ad67'
+          for attempt in range(18):
+              with urllib.request.urlopen(image, timeout=25) as response:
+                  data = response.read()
+              with urllib.request.urlopen(home, timeout=25) as response:
+                  html = response.read().decode('utf-8')
+              if hashlib.sha256(data).hexdigest() == expected and 'v=014907230d41' in html: break
+              time.sleep(5)
+          assert hashlib.sha256(data).hexdigest() == expected, 'Production is not serving original image bytes'
+          assert len(data) == 319412
+          assert 'v=014907230d41' in html
+          chrome = shutil.which('google-chrome') or shutil.which('chromium') or shutil.which('chromium-browser')
+          if not chrome:
+              subprocess.run(['python3', '-m', 'playwright', 'install', '--with-deps', 'chromium'], check=True)
+          results = {'image_bytes': len(data), 'sha256': expected, 'cases': []}
+          with sync_playwright() as p:
+              options = {'headless': True, 'args': ['--no-sandbox']}
+              if chrome: options['executable_path'] = chrome
+              browser = p.chromium.launch(**options)
+              for label, viewport, dpr in [('desktop', {'width': 1440, 'height': 900}, 2), ('mobile', {'width': 390, 'height': 844}, 3)]:
+                  context = browser.new_context(viewport=viewport, device_scale_factor=dpr)
+                  page = context.new_page()
+                  page.goto(home, wait_until='networkidle', timeout=45000)
+                  logo = page.locator('header .brand img')
+                  assert logo.count() == 1
+                  logo.evaluate('(img) => img.decode()')
+                  info = logo.evaluate('''img => {
+                    const r=img.getBoundingClientRect(), s=getComputedStyle(img);
+                    const c=document.createElement('canvas'); c.width=img.naturalWidth; c.height=img.naturalHeight;
+                    const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const px=ctx.getImageData(0,0,c.width,c.height).data;
+                    let dark=0;for(let i=0;i<px.length;i+=4){if(px[i+3]>127&&px[i]<128&&px[i+1]<128&&px[i+2]<128) dark++;}
+                    return {src:img.currentSrc,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,displayWidth:r.width,displayHeight:r.height,opacity:s.opacity,visibility:s.visibility,darkPixels:dark};
+                  }''')
+                  assert info['naturalWidth'] == 1026 and info['naturalHeight'] == 676
+                  assert info['displayWidth'] == (96 if label == 'desktop' else 86)
+                  assert info['visibility'] == 'visible' and info['opacity'] == '1'
+                  assert info['darkPixels'] > 1000
+                  page.screenshot(path='evidence/' + label + '-page.png')
+                  page.locator('header').screenshot(path='evidence/' + label + '-header.png')
+                  if label == 'desktop':
+                      page.evaluate("document.body.style.zoom='3'")
+                      page.locator('header .brand').screenshot(path='evidence/header-logo-300-percent.png')
+                      page.evaluate("document.body.style.zoom='1'")
+                  page.goto(home + 'about/', wait_until='networkidle', timeout=45000)
+                  page.locator('header .brand').click()
+                  page.wait_for_url(home, timeout=15000)
+                  info['home_link_passed'] = True
+                  info['case'] = label
+                  results['cases'].append(info)
+                  context.close()
+              browser.close()
+          pathlib.Path('evidence/verification.json').write_text(json.dumps(results, ensure_ascii=False, indent=2))
+          print(json.dumps(results, ensure_ascii=False))
+          PY
+      - name: Save production screenshots and verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nomad-logo-production-evidence
+          path: evidence/
+          retention-days: 7

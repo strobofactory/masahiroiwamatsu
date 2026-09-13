@@ -1,0 +1,63 @@
+name: Import verified original NOMAD FIELD PNG
+on:
+  push:
+    branches: [fix/nomad-original-png-20260913]
+    paths: [.github/workflows/import-original-nomad-logo.yml]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify and copy the original PNG without image processing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, struct, urllib.request, urllib.parse, zlib
+          source = 'https://pikaso.cdnpk.net/private/production/5433014285/3583092015.png?token=exp=1789516800~hmac=0c28000dffeed0a4f6f76ccfbfd676588fbf9d671553664480d144e9200390f1'
+          expected = '014907230d410e7f737e3071448b361a226703bc0fe8dde1dd9b818a0232ad67'
+          with urllib.request.urlopen(source, timeout=45) as response:
+              data = response.read()
+          assert len(data) == 319412, f'Unexpected byte length: {len(data)}'
+          assert hashlib.sha256(data).hexdigest() == expected, 'Original PNG checksum mismatch; refusing to publish'
+          assert data[:8] == b'\x89PNG\r\n\x1a\n'
+          assert struct.unpack('>II', data[16:24]) == (1026, 676)
+          offset, compressed, ended = 8, bytearray(), False
+          while offset < len(data):
+              length = struct.unpack('>I', data[offset:offset+4])[0]
+              kind = data[offset+4:offset+8]
+              payload = data[offset+8:offset+8+length]
+              crc = struct.unpack('>I', data[offset+8+length:offset+12+length])[0]
+              assert zlib.crc32(kind + payload) & 0xffffffff == crc, 'Invalid PNG chunk CRC'
+              if kind == b'IDAT': compressed.extend(payload)
+              offset += 12 + length
+              if kind == b'IEND':
+                  ended = True
+                  break
+          assert ended and offset == len(data), 'Incomplete PNG'
+          assert len(zlib.decompress(compressed)) == (1026 * 4 + 1) * 676
+          root = 'https://api.github.com/repos/' + os.environ['REPO']
+          def api(path, method='GET', payload=None):
+              headers = {'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'nomad-logo-byte-import'}
+              body = None if payload is None else json.dumps(payload).encode('utf-8')
+              if body is not None: headers['Content-Type'] = 'application/json'
+              request = urllib.request.Request(root + path, data=body, headers=headers, method=method)
+              with urllib.request.urlopen(request, timeout=45) as response:
+                  return json.load(response)
+          path = '/contents/public/logos/logo_v2.png'
+          branch = os.environ['BRANCH']
+          current = api(path + '?ref=' + urllib.parse.quote(branch, safe=''))
+          blob_sha = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+          assert blob_sha == '48bf3fc70e16ffe4621392056de9e9b788765461'
+          if current['sha'] != blob_sha:
+              result = api(path, 'PUT', {'message': 'Restore byte-identical original logo_v2.png (1026x676)', 'content': base64.b64encode(data).decode('ascii'), 'sha': current['sha'], 'branch': branch})
+              assert result['content']['sha'] == blob_sha
+          final = api(path + '?ref=' + urllib.parse.quote(branch, safe=''))
+          stored = base64.b64decode(final['content'])
+          assert stored == data, 'GitHub round-trip byte mismatch'
+          print(json.dumps({'verified': True, 'width': 1026, 'height': 676, 'bytes': len(data), 'sha256': expected, 'git_blob_sha': blob_sha}))
+          PY

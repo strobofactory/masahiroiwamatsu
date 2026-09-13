@@ -6,13 +6,17 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@astrojs/rss": "latest",
     "@astrojs/sitemap": "latest",
+    "@modelcontextprotocol/sdk": "1.30.0",
     "@vercel/oidc": "latest",
     "astro": "latest",
-    "sharp": "0.35.4"
+    "jose": "6.1.0",
+    "sharp": "0.35.4",
+    "zod": "3.25.76"
   }
 }

@@ -80,6 +80,7 @@ Studioの公開操作はGitHub Contents APIを使って `src/content/notes/` に
 詳細:
 - `docs/CONTENT_WORKFLOW.md`
 - `docs/NOTE_TEMPLATE.md`
+- `docs/MCP_CONNECTOR.md`（Claude.ai Remote MCPによる下書き入稿）
 - `AGENTS.md`
 
 ## Article metadata

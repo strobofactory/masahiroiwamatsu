@@ -35,10 +35,19 @@
       if(!doc)return;
 
       const style=doc.createElement('style');
-      style.textContent=`section.panel:has(#articleSelect){display:none!important}.top a[href="/"]{display:none!important}#publishBtn{display:none!important}.studio-list-link,.studio-web-review-link{font-size:11px;letter-spacing:.08em;color:#666;text-decoration:none;border:1px solid #d9d9d2;padding:8px 10px;background:#fff}.studio-list-link:hover,.studio-web-review-link:hover{color:#111;border-color:#999}.studio-review-btn{background:#111!important;color:#fff!important;border-color:#111!important}.studio-review-btn:hover{background:#333!important}.studio-delete-btn{border-color:#b9a8a8!important;color:#8a3030!important}.studio-delete-btn:hover{border-color:#8a3030!important;background:#fff7f7!important}.studio-save-note{font-size:10px;color:#777;margin-top:8px}`;
+      style.textContent=`section.panel:has(#articleSelect){display:none!important}.top a[href="/"]{display:none!important}#publishBtn{display:none!important}.studio-list-link,.studio-web-review-link{font-size:11px;letter-spacing:.08em;color:#666;text-decoration:none;border:1px solid #d9d9d2;padding:8px 10px;background:#fff}.studio-list-link:hover,.studio-web-review-link:hover{color:#111;border-color:#999}.studio-review-btn{background:#111!important;color:#fff!important;border-color:#111!important}.studio-review-btn:hover{background:#333!important}.studio-delete-btn{border-color:#b9a8a8!important;color:#8a3030!important}.studio-delete-btn:hover{border-color:#8a3030!important;background:#fff7f7!important}.studio-save-note{font-size:10px;color:#777;margin-top:8px}.studio-brand{display:block;flex:0 0 auto;line-height:0}.studio-brand img{display:block;width:96px;height:auto}@media(max-width:780px){.studio-brand img{width:86px}}`;
       doc.head.appendChild(style);
 
       const top=doc.querySelector('.top');
+      const oldBrand=top?.querySelector('.brand')?.parentElement;
+      if(oldBrand&&oldBrand.parentElement===top){
+        const logo=doc.createElement('a');
+        logo.href='/studio/';logo.target='_top';logo.className='studio-brand';logo.setAttribute('aria-label','NOMAD FIELD — 記事一覧');
+        const image=doc.createElement('img');
+        image.src='/logos/logo_v2.png?v=014907230d41';image.alt='NOMAD FIELD';image.width=1026;image.height=676;
+        logo.appendChild(image);
+        oldBrand.replaceWith(logo);
+      }
       if(top&&!doc.querySelector('.studio-list-link')){
         const list=doc.createElement('a');list.href='/studio/';list.target='_top';list.className='studio-list-link';list.textContent='← 記事一覧';top.appendChild(list);
         const web=doc.createElement('a');web.href='/studio/web-review/';web.target='_top';web.className='studio-web-review-link';web.textContent='WEB REVIEW';top.appendChild(web);
